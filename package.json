@@ -1,17 +1,22 @@
 {
-    "name": "mpb",
-    "scripts": {
-        "build": "parcel build src/manifest.json src/inject/*.js --config @parcel/config-webextension"
-    },
-    "devDependencies": {
-        "@parcel/config-webextension": "^2.12.0",
-        "autoprefixer": "^10.4.19",
-        "buffer": "^6.0.3",
-        "parcel": "^2.12.0",
-        "postcss": "^8.4.39",
-        "tailwindcss": "^3.4.4"
-    },
-    "dependencies": {
-        "plotly.js-dist-min": "^2.33.0"
-    }
+  "name": "meters-per-beat",
+  "description": "A visualization of running performance with Garmin Connect",
+  "private": true,
+  "version": "1.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch --mode development",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.3",
+    "vite": "^5.0.0",
+    "vite-plugin-web-extension": "^4.0.0",
+    "webextension-polyfill": "^0.10.0"
+  },
+  "dependencies": {
+    "@types/plotly.js-dist-min": "^2.3.4",
+    "@types/webextension-polyfill": "^0.10.7",
+    "plotly.js-dist-min": "^2.34.0"
+  }
 }
