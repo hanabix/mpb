@@ -1,7 +1,12 @@
+# Node
 .nvm/
-
 node_modules/
-
-.parcel*
-
 dist/
+
+# Scala
+out/
+.bsp/
+.metals/
+
+#
+.vscode/
