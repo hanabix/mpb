@@ -51,18 +51,6 @@
 
 ## 安装
 
-进入[Release][rs]，在最新的版本 Assets 中下载 “mpb.zip” 文件到本地。
+请移步[Chrome 商店][ws]。
 
-请参见[加载已解压的扩展程序][lupe]。
-
-[rs]: https://github.com/zhongl/mpb/releases
-[lupe]: https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked
-
-
-## 构建
-
-```bash
-source .envrc
-npm ci 
-npm run build
-```
+[ws]: https://chromewebstore.google.com/detail/meters-per-beat/nojpfacijldambjcnpbpneghbaefnlme?authuser=0&hl=zh-CN
