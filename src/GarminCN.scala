@@ -7,10 +7,8 @@ import scala.scalajs.js.annotation.*
 
 import org.scalajs.dom.*
 
-import DateString.*
-
 object Garmin:
-  val base = "https://connect.garmin.cn"
+  inline val base = "https://connect.garmin.cn"
 
   type DateString = String
 
@@ -23,6 +21,13 @@ object Garmin:
     var excludeChildren: js.UndefOr[Boolean] = js.undefined
     var startDate: js.UndefOr[DateString]    = js.undefined
     @JSName("_") var now: js.UndefOr[Double] = js.undefined
+  object ActivitiesFilter:
+    def apply(tp: String): ActivitiesFilter = new:
+      excludeChildren = false
+      start = 0
+      limit = 30
+      activityType = tp
+      now = js.Date.now()
 
   trait Performace extends js.Object:
     var startTimeLocal: js.UndefOr[String]        = js.undefined
@@ -70,7 +75,9 @@ object Garmin:
   trait ActivityType extends js.Object:
     var typeKey: js.UndefOr[String] = js.undefined
 
-  def activityLapsList(workoutId: Double, latestDays: Double): Future[js.Array[ActivityLaps]] =
+  def activityLapsList(workoutId: Double, latestDays: Double)(using
+    DateFormat[Double]
+  ): Future[js.Array[ActivityLaps]] =
     val cur = js.Date.now()
     def filter = new Garmin.ActivitiesFilter:
       activityType = "running"

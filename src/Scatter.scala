@@ -4,7 +4,6 @@ import typings.plotlyJs.anon.PartialPlotDataAutobinx
 import typings.plotlyJs.mod.Data
 import typings.plotlyJs.plotlyJsStrings as cs
 
-import DateString.*
 import Garmin.*
 
 trait Scatter[A] extends (A => Data):
@@ -24,7 +23,7 @@ object Scatter:
         .setHovertext(active.map(_.text))
         .setHovertemplate("<b>%{y:.3f}</b><br>%{hovertext}<extra></extra>")
 
-  given activityLaps(using Scatter[js.Array[Cast[Lap]]]): Scatter[ActivityLaps] = ga =>
+  given activityLaps(using Scatter[js.Array[Cast[Lap]]], DateFormat[String]): Scatter[ActivityLaps] = ga =>
     ga match
       case (a, laps) =>
         laps.scatter

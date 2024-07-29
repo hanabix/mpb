@@ -10,3 +10,6 @@ out/
 
 #
 .vscode/
+
+# temp
+.tmp/
