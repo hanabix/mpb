@@ -1,12 +1,9 @@
-import scala.annotation.tailrec
+
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 import scala.scalajs.js
 import scala.scalajs.js.Array as Arr
 import scala.scalajs.js.JSConverters.*
 import scala.scalajs.js.RegExp
-import scala.util.boundary
-import scala.util.boundary.break
 
 import org.scalajs.dom.*
 

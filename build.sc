@@ -8,6 +8,10 @@ object root extends RootModule with ScalaJSModule with ScalablyTyped {
   def scalaJSVersion = "1.16.0"
   def moduleKind     = ModuleKind.ESModule
 
+  override def scalacOptions: Target[Seq[String]] = T {
+    super.scalacOptions() ++ Seq("-Wunused:all")
+  }
+
   object test extends ScalaJSTests {
     def ivyDeps       = Agg(ivy"com.lihaoyi::utest::0.7.11")
     def testFramework = "utest.runner.Framework"
