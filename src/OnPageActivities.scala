@@ -12,7 +12,7 @@ import plot.*
 
 object OnPageActivities:
 
-  def apply()(using a: Anchor[HTMLElement], s: Scatter[Activities]): Route =
+  def apply()(using a: Anchor[HTMLElement], s: Scatter[SearchResult]): Route =
     case (Activities(tp), HasListItem()) =>
       val root = a.init(document.querySelector("div.advanced-filtering").before(_), "mpb")
       if tp != "running" then root.remove()

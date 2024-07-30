@@ -13,7 +13,7 @@ import common.Functional.*
 object Service:
   def activityLapsList(workoutId: Double, limit: Int)(using
     DateFormat[Double]
-  ): Future[js.Array[ActivityLaps]] =
+  ): Future[js.Array[ActivityByWorkout]] =
     val filter = SearchFilter("running")
     filter.limit = limit
 
@@ -24,6 +24,10 @@ object Service:
       .map(_.toJSArray)
   end activityLapsList
 
+  def activitiesByProfile(id: String, p: Pagination) =
+    val url = s"${base}/activitylist-service/activities/$id${params(p)}"
+    get[ActivitiesByProfile](url, s"https://connect.garmin.cn/modern/profile/$id")
+
   def activity(id: Double) =
     val url = s"${base}/activity-service/activity/$id?_=${js.Date.now()}"
     get[Activity](url, s"https://connect.garmin.cn/modern/activity/$id")
@@ -31,7 +35,7 @@ object Service:
   def activities(filter: SearchFilter) =
     val url = s"${base}/activitylist-service/activities/search/activities${params(filter)}"
     // TODO improve referer
-    get[Activities](url, "https://connect.garmin.cn/modern/activities")
+    get[SearchResult](url, "https://connect.garmin.cn/modern/activities")
 
   def laps(activityId: Double) =
     inline def equal[A](a: A): js.UndefOr[A] => Boolean = a == _

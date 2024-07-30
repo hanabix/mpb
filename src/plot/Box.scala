@@ -18,10 +18,10 @@ object Box:
       .PartialPlotDataAutobinx()
       .setY(laps.map(_.mpb))
       .setHoverinfo(cs.y)
-      .setWidth(0.1)
+      .setWidth(0.3)
       .setType(cs.box)
 
-  given activityLaps(using Box[Laps], DateFormat[String]): Box[ActivityLaps] = ga =>
+  given activityLaps(using Box[Laps], DateFormat[String]): Box[ActivityByWorkout] = ga =>
     ga match
       case (a, laps) =>
         laps.box

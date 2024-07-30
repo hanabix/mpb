@@ -14,7 +14,7 @@ import garmin.*
 import plot.*
 
 object OnPageWorkout:
-  def apply()(using a: Anchor[HTMLElement], s: Scatter[ActivityLaps], b: Box[ActivityLaps]): Route =
+  def apply()(using a: Anchor[HTMLElement], s: Scatter[ActivityByWorkout], b: Box[ActivityByWorkout]): Route =
     case (Workout(Seq(_, id: String), "running"), PageHeader(e)) =>
       for list <- Service.activityLapsList(id.toDouble, 30) do
         val limit  = Math.min(list.length, 14)
