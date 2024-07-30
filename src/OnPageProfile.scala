@@ -22,11 +22,15 @@ object OnPageProfile:
       val p: Pagination = new:
         start = 1
         limit = 30
-      for ap <- Service.activitiesByProfile(id, p) do
-        val sr     = ap.activityList.get.filter(_.activityType.get.typeKey == "running")
-        val layout = Plot.Layout("近期跑步速心比变化趋势")
-        val config = Plot.Config().setDisplayModeBar(false)
-        Plot(a.init(e.before(_), "scatter"), js.Array(sr), layout, config)(using _.scatter)
+      for
+        ap <- Service.activitiesByProfile(id, p)
+        al <- ap.activityList
+      do
+        val sr = al.filter(_.activityType.get.typeKey == "running")
+        if sr.nonEmpty then
+          val layout = Plot.Layout("近期跑步速心比变化趋势")
+          val config = Plot.Config().setDisplayModeBar(false)
+          Plot(a.init(e.before(_), "scatter"), js.Array(sr), layout, config)(using _.scatter)
   end apply
 
   private val Profile = Extract[URL, Seq[js.UndefOr[String]]]:

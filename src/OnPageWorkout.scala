@@ -16,7 +16,7 @@ import plot.*
 object OnPageWorkout:
   def apply()(using a: Anchor[HTMLElement], s: Scatter[ActivityByWorkout], b: Box[ActivityByWorkout]): Route =
     case (Workout(Seq(_, id: String), "running"), PageHeader(e)) =>
-      for list <- Service.activityLapsList(id.toDouble, 30) do
+      for list <- Service.activityLapsList(id.toDouble, 30) if list.nonEmpty do
         val limit  = Math.min(list.length, 14)
         val latest = Math.min(limit, 5)
         val layout = Plot.Layout(s"最近${limit}次速心比分布趋势").setShowlegend(false)

@@ -15,8 +15,10 @@ object OnPageActivities:
   def apply()(using a: Anchor[HTMLElement], s: Scatter[SearchResult]): Route =
     case (Activities(tp), HasListItem()) =>
       val root = a.init(document.querySelector("div.advanced-filtering").before(_), "mpb")
-      if tp != "running" then root.remove()
-      else for gas <- Service.activities(SearchFilter(tp.get)) do Plot(root, Array(gas), "速心比变化趋势")(using _.scatter)
+      if tp == "running" || tp == undefined then 
+        for gas <- Service.activities(SearchFilter("running")) if gas.nonEmpty do
+          Plot(root, Array(gas), "速心比变化趋势")(using _.scatter)
+      else root.remove()
   end apply
 
   private val Activities = Extract[URL, UndefOr[String]]:
