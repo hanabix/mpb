@@ -4,7 +4,6 @@ import typings.plotlyJs.anon.PartialPlotDataAutobinx
 import typings.plotlyJs.mod.Data
 import typings.plotlyJs.plotlyJsStrings as cs
 
-import Functional.*
 import Garmin.*
 
 trait Scatter[A] extends (A => Data):
