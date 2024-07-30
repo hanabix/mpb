@@ -11,12 +11,11 @@ import common.*
 import common.Functional.*
 
 object Service:
-  def activityLapsList(workoutId: Double, latestDays: Double)(using
+  def activityLapsList(workoutId: Double, limit: Int)(using
     DateFormat[Double]
   ): Future[js.Array[ActivityLaps]] =
-    val cur    = js.Date.now()
     val filter = SearchFilter("running")
-    filter.startDate = cur.dayBefore(7).ymd("fr-CA")
+    filter.limit = limit
 
     activities(filter)
       .flatMap: sa =>

@@ -1,6 +1,6 @@
 package plot
 
-import scala.scalajs.js.*
+import scala.scalajs.js
 
 import org.scalajs.dom.*
 
@@ -9,8 +9,15 @@ import typings.plotlyJs.mod.*
 import typings.plotlyJsDistMin.mod
 
 object Plot:
-  def apply[A](root: HTMLElement, data: Array[A], title: String)(using Conversion[A, Data]) =
-    mod.newPlot(root, data.map(_.convert), Layout(title), Config())
+  def apply[A](root: HTMLElement, data: js.Array[A], title: String)(using
+    Conversion[A, Data]
+  ): js.Promise[PlotlyHTMLElement] =
+    apply(root, data, Layout(title), Config())
+
+  def apply[A](root: HTMLElement, data: js.Array[A], layout: PartialLayout, config: PartialConfig = Config())(using
+    Conversion[A, Data]
+  ): js.Promise[PlotlyHTMLElement] =
+    mod.newPlot(root, data.map(_.convert), layout, config)
 
   object Layout:
     def apply(title: String) = PartialLayout()
