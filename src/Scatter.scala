@@ -4,23 +4,24 @@ import typings.plotlyJs.anon.PartialPlotDataAutobinx
 import typings.plotlyJs.mod.Data
 import typings.plotlyJs.plotlyJsStrings as cs
 
+import Functional.*
 import Garmin.*
 
 trait Scatter[A] extends (A => Data):
   extension (a: A) def scatter = this(a)
 
 object Scatter:
+
   given laps(using
     MetersPerBeat[Performace],
     HoverText[Performace]
   ): Scatter[js.Array[Cast[Lap]]] =
     laps =>
-      val active = laps.filter(_.intensityType == "ACTIVE")
       Data
         .PartialPlotDataAutobinx()
-        .setY(active.map(_.mpb))
-        .setX(active.map(_.lapIndex.get))
-        .setHovertext(active.map(_.text))
+        .setY(laps.map(_.mpb))
+        .setX(laps.map(_.lapIndex.get))
+        .setHovertext(laps.map(_.text))
         .setHovertemplate("<b>%{y:.3f}</b><br>%{hovertext}<extra></extra>")
 
   given activityLaps(using Scatter[js.Array[Cast[Lap]]], DateFormat[String]): Scatter[ActivityLaps] = ga =>

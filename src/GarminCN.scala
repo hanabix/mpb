@@ -106,8 +106,11 @@ object Garmin:
 
   def laps(activityId: Double) =
     val url = s"${base}/activity-service/activity/${activityId}/splits?_=${js.Date.now()}"
+    import Functional.*
+    inline def equal[A](a: A): js.UndefOr[A] => Boolean = a == _
+    inline def running: Cast[Lap] => Boolean = ((_: Cast[Lap]).intensityType) |> (equal("ACTIVE") || equal("INTERVAL"))
     for r <- service[js.Dynamic](url, s"https://connect.garmin.cn/modern/activity/${activityId}")
-    yield r.lapDTOs.asInstanceOf[js.Array[Cast[Lap]]]
+    yield r.lapDTOs.asInstanceOf[js.Array[Cast[Lap]]].filter(running)
 
   inline def service[A](url: String, referrerV: String = window.location.href): Future[A] =
     val hi = js.Dynamic
