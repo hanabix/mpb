@@ -1,9 +1,6 @@
-import scala.scalajs.js.*
+package common
+
 import org.scalajs.dom.*
-import Functional.*
-import GetURL.*
-import Regex.*
-import Unapply.*
 
 trait Anchor[A]:
   def init(mount: Node => Unit, id: String): A

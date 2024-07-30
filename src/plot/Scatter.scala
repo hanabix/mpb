@@ -1,10 +1,13 @@
+package plot
+
 import scala.scalajs.js
 
 import typings.plotlyJs.anon.PartialPlotDataAutobinx
 import typings.plotlyJs.mod.Data
 import typings.plotlyJs.plotlyJsStrings as cs
 
-import Garmin.*
+import common.*
+import garmin.*
 
 trait Scatter[A] extends (A => Data):
   extension (a: A) def scatter = this(a)
@@ -12,9 +15,9 @@ trait Scatter[A] extends (A => Data):
 object Scatter:
 
   given laps(using
-    MetersPerBeat[Performace],
-    HoverText[Performace]
-  ): Scatter[js.Array[Cast[Lap]]] =
+    MetersPerBeat[Performance],
+    HoverText[Performance]
+  ): Scatter[Laps] =
     laps =>
       Data
         .PartialPlotDataAutobinx()
@@ -23,7 +26,7 @@ object Scatter:
         .setHovertext(laps.map(_.text))
         .setHovertemplate("<b>%{y:.3f}</b><br>%{hovertext}<extra></extra>")
 
-  given activityLaps(using Scatter[js.Array[Cast[Lap]]], DateFormat[String]): Scatter[ActivityLaps] = ga =>
+  given activityLaps(using Scatter[Laps], DateFormat[String]): Scatter[ActivityLaps] = ga =>
     ga match
       case (a, laps) =>
         laps.scatter
@@ -32,8 +35,8 @@ object Scatter:
           .setName(a.startTimeLocal.get.md("en-US"))
 
   given activities(using
-    MetersPerBeat[Performace]
-  ): Scatter[js.Array[Cast[Activity & Workout & Performace]]] = gas =>
+    MetersPerBeat[Performance]
+  ): Scatter[js.Array[ActivityItem]] = gas =>
     Data
       .PartialPlotDataAutobinx()
       .setY(gas.map(_.mpb))

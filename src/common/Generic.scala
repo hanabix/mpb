@@ -1,3 +1,5 @@
+package common
+
 object Generic:
   import Tuple.*
 
