@@ -11,10 +11,9 @@ trait Box[A] extends (A => Data):
 
 object Box:
   given laps(using MetersPerBeat[Performace]): Box[js.Array[Cast[Lap]]] = laps =>
-    val active = laps.filter(_.intensityType == "ACTIVE")
     Data
       .PartialPlotDataAutobinx()
-      .setY(active.map(_.mpb))
+      .setY(laps.map(_.mpb))
       .setHoverinfo(cs.y)
       .setWidth(0.1)
       .setType(cs.box)
