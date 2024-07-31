@@ -3,6 +3,7 @@
 
 ![Activities Chart](./mpb-activities.png)
 ![Activity Chart](./mpb-activity.png)
+![Profile Chart](./mpb-profile.png)
 
 这是一款面向 **入门跑者** 和 **[MAF训练法][maf]跑者** 的，聚焦于跑步训练中 **[速心比](#速心比meters-per-beat)** 指标数据可视化的浏览器扩展程序（俗称：插件）。
 

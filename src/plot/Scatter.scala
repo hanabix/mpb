@@ -26,7 +26,7 @@ object Scatter:
         .setHovertext(laps.map(_.text))
         .setHovertemplate("<b>%{y:.3f}</b><br>%{hovertext}<extra></extra>")
 
-  given activityLaps(using Scatter[Laps], DateFormat[String]): Scatter[ActivityLaps] = ga =>
+  given activityLaps(using Scatter[Laps], DateFormat[String]): Scatter[ActivityByWorkout] = ga =>
     ga match
       case (a, laps) =>
         laps.scatter
@@ -36,7 +36,7 @@ object Scatter:
 
   given activities(using
     MetersPerBeat[Performance]
-  ): Scatter[js.Array[ActivityItem]] = gas =>
+  ): Scatter[SearchResult] = gas =>
     Data
       .PartialPlotDataAutobinx()
       .setY(gas.map(_.mpb))
