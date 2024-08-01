@@ -39,7 +39,7 @@ object Service:
 
   def laps(activityId: Double) =
     inline def equal[A](a: A): js.UndefOr[A] => Boolean = a == _
-    inline def running: Lap => Boolean = ((_: Lap).intensityType) |> (equal("ACTIVE") || equal("INTERVAL"))
+    inline def running: Lap => Boolean = ((_: Lap).intensityType) |> (equal("ACTIVE") || equal("INTERVAL") || equal(js.undefined))
 
     val url = s"${base}/activity-service/activity/${activityId}/splits?_=${js.Date.now()}"
     for r <- get[js.Dynamic](url, s"https://connect.garmin.cn/modern/activity/${activityId}")
