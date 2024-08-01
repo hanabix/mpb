@@ -19,7 +19,7 @@ object OnPageActivity:
       for
         a <- Service.activity(id.toDouble)
         t <- a.activityTypeDTO
-        k <- t.typeKey if k == "running"
+        k <- t.typeKey if k == "running" || k == "treadmill_running"
       do
         for laps <- Service.laps(id.toDouble) if laps.nonEmpty do
           Plot(aa.init(e.before(_), "scatter"), Arr(laps), "速心比变化趋势")(using _.scatter)
