@@ -25,3 +25,12 @@ jobs:
       with:
         files: mpb.zip
         generate_release_notes: true
+    - name: Upload to webstore   
+      uses: mnao305/chrome-extension-upload@v5.0.0
+      with:
+        file-path: dist/file.zip
+        extension-id: nojpfacijldambjcnpbpneghbaefnlme
+        client-id: ${{ secrets.CLIENT_ID }}
+        client-secret: ${{ secrets.CLIENT_SECRET }}
+        refresh-token: ${{ secrets.REFRESH_TOKEN }}        
+        publish: false
