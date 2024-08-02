@@ -4,9 +4,13 @@ import $ivy.`com.github.lolgab::mill-scalablytyped::0.1.14`
 import com.github.lolgab.mill.scalablytyped._
 
 object root extends RootModule with ScalaJSModule with ScalablyTyped {
-  def scalaVersion   = "3.4.2"
+  def scalaVersion   = "3.5.0"
   def scalaJSVersion = "1.16.0"
   def moduleKind     = ModuleKind.ESModule
+
+  override def ivyDeps: T[Agg[Dep]] = T {
+    super.ivyDeps() ++ Agg(ivy"com.lihaoyi::sourcecode::0.4.2")
+  }
 
   override def scalacOptions: Target[Seq[String]] = T {
     super.scalacOptions() ++ Seq("-Wunused:all")
