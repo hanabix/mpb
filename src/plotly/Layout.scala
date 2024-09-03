@@ -8,6 +8,7 @@ import typings.plotlyJs.anon.PartialLegendBgcolor
 import typings.plotlyJs.anon.PartialMargin
 import typings.plotlyJs.plotlyJsBooleans.`false`
 import typings.plotlyJs.plotlyJsStrings.right
+import typings.plotlyJs.plotlyJsStrings.y2
 
 import core.metrics.*
 
@@ -32,7 +33,7 @@ object Layout:
       .setShowlegend(true)
       .setLegend(inside)
       .setXaxis(PartialLayoutAxis().setDtick(1.0).setTitle("圈数"))
-      .setYaxis(PartialLayoutAxis().setOverlaying("y2").setTickmodeSync)
+      .setYaxis(PartialLayoutAxis().setOverlaying(y2).setTickmodeSync)
       .setYaxis2(PartialLayoutAxis().setSide(right))
   end intervals
 
