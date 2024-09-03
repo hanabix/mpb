@@ -28,7 +28,7 @@ jobs:
     - name: Upload to webstore   
       uses: mnao305/chrome-extension-upload@v5.0.0
       with:
-        file-path: dist/file.zip
+        file-path: mpb.zip
         extension-id: nojpfacijldambjcnpbpneghbaefnlme
         client-id: ${{ secrets.CLIENT_ID }}
         client-secret: ${{ secrets.CLIENT_SECRET }}
