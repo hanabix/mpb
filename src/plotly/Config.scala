@@ -13,8 +13,8 @@ object Config:
   given common: Config[Common] = _ =>
     PartialConfig()
       .setResponsive(true)
+      .setDisplayModeBar(true)
       .setModeBarButtonsToRemoveVarargs(
-          ModeBarDefaultButtons.toImage,
           ModeBarDefaultButtons.lasso2d,
           ModeBarDefaultButtons.select2d,
           ModeBarDefaultButtons.pan2d,
