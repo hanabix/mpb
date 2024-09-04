@@ -23,11 +23,12 @@ object DataArrayFrom:
       Data
         .PartialPlotDataAutobinx()
         .setName(name)
+        .setLine(PartialScatterLine().setWidth(1))
         .setY(v.map(fy).toJSArray)
         .setX(v.indices.map(_ + 1.0).toJSArray)
 
     js.Array(
-        scatterLine("mpb", _.mpb),
+        scatterLine("mpb", _.mpb).setShowlegend(false),
         scatterLine("bpm", _.averageHR.round).setVisible(true).setYaxis("y2"),
         scatterLine("spm", _.averageRunCadence.round).setVisible(legendonly).setYaxis("y2")
         // scatterLine("/km", _.pace).setVisible(legendonly).setYaxis("y2")

@@ -23,18 +23,27 @@ object Layout:
 
   given intervals(using Layout[Common], Title[Intervals]): Layout[Intervals] = is =>
     inline def inside = PartialLegendBgcolor()
-      .setX(1.05)
+      .setX(1.1)
       .setY(0.5)
       .setItemclick(`false`)
       .setItemdoubleclick(`false`)
+
+    inline def yAxis = PartialLayoutAxis()
+      .setColor("#1f77b4")
+      .setOverlaying(y2)
+      .setTickmodeSync
+
+    inline def yAxis2 = PartialLayoutAxis()
+      .setColor("#ff7f0e")
+      .setSide(right)
 
     Common.layout
       .setTitle(is.title)
       .setShowlegend(true)
       .setLegend(inside)
       .setXaxis(PartialLayoutAxis().setDtick(1.0).setTitle("圈数"))
-      .setYaxis(PartialLayoutAxis().setOverlaying(y2).setTickmodeSync)
-      .setYaxis2(PartialLayoutAxis().setSide(right))
+      .setYaxis(yAxis)
+      .setYaxis2(yAxis2)
   end intervals
 
   given history(using Layout[Common], Title[History]): Layout[History] = h =>

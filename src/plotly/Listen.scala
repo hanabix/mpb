@@ -33,6 +33,7 @@ object Listen:
     p.on(
         plotly_legendclick,
         accept[LegendClickEvent]: e =>
+          org.scalajs.dom.console.log(e)
           e.curveNumber.toInt match
             case 0 =>
             case i =>
