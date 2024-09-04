@@ -1,8 +1,10 @@
 package garmin
 
+
 import org.scalajs.dom.Element
 import org.scalajs.dom.URL
 import org.scalajs.dom.URLSearchParams
+
 
 private[garmin] object URL:
   def unapply(u: URL): Option[(String, URLSearchParams)] =

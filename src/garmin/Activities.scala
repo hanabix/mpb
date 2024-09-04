@@ -1,9 +1,7 @@
 package garmin
 
-import java.util as ju
+import java.util.NoSuchElementException as Complain
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 import org.scalajs.dom.HTMLElement
 import org.scalajs.dom.document
@@ -21,14 +19,10 @@ object Activities:
     Inject[History]
   ): Page[Activities] =
     case (URL("/modern/activities", `activityType`("running")), `a.inline-edit-target`(_)) =>
-      val es = `a.inline-edit-target`.all(Seq(document)).toList
-      val fs = for case `href`(s"/modern/activity/$id") <- es yield ActivityId(id).request
-      if !fs.isEmpty then
-        for history <- Future.sequence(fs) do
-          inline def complain[A]: A = throw ju.NoSuchElementException("div.advanced-filtering")
-          val e                     = `div.advanced-filtering`(document).getOrElse(complain)
-          history.filter(_.nonEmpty).inject(`mpb`.elementAt(e.before(_)))
-      end if
+      val es  = `a.inline-edit-target`.all(Seq(document)).toList
+      val e   = `div.advanced-filtering`(document).getOrElse(throw Complain("anchor"))
+      val ids = for case `href`(s"/modern/activity/$id") <- es yield ActivityId(id)
+      ids.inject(`mpb`.elementAt(e.before(_)))
       None
 
     case (URL("/modern/activities", `activityType`("running")), _) =>
