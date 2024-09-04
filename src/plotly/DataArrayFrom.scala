@@ -9,6 +9,7 @@ import typings.plotlyJs.mod.PlotType
 import typings.plotlyJs.plotlyJsBooleans.`false`
 import typings.plotlyJs.plotlyJsStrings.legendonly
 import typings.plotlyJs.plotlyJsStrings.y
+import typings.plotlyJs.plotlyJsStrings.yPlussignname
 
 import core.DateFormat
 import core.metrics.*
@@ -23,11 +24,13 @@ object DataArrayFrom:
       Data
         .PartialPlotDataAutobinx()
         .setName(name)
+        .setLine(PartialScatterLine().setWidth(1))
         .setY(v.map(fy).toJSArray)
         .setX(v.indices.map(_ + 1.0).toJSArray)
+        .setHoverinfo(yPlussignname)
 
     js.Array(
-        scatterLine("mpb", _.mpb),
+        scatterLine("mpb", _.mpb).setShowlegend(false),
         scatterLine("bpm", _.averageHR.round).setVisible(true).setYaxis("y2"),
         scatterLine("spm", _.averageRunCadence.round).setVisible(legendonly).setYaxis("y2")
         // scatterLine("/km", _.pace).setVisible(legendonly).setYaxis("y2")

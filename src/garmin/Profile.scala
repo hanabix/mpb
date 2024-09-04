@@ -1,35 +1,25 @@
 package garmin
 
-import java.util as ju
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import java.util.NoSuchElementException as Complain
 
 import org.scalajs.dom.Element
 import org.scalajs.dom.HTMLElement
 import org.scalajs.dom.document
 
 import core.*
-import core.metrics.*
-import core.service.Fetch
 import sourcecode.Name
 
 sealed trait Profile
 object Profile:
   given page(
     using Initialize[HTMLElement],
-    Fetch[ActivityId, Intervals],
-    Inject[History]
+    Inject[List[ActivityId]]
   ): Page[Profile] =
     case (URL(s"/modern/profile/$_", _), `a[data-activityid]`(_)) =>
-      val es = `a[data-activityid]`.all(Seq(document)).filter(isRunning).toList
-      val fs = for case `data-activityid`(id) <- es yield ActivityId(id).request
-      if !fs.isEmpty then
-        for history <- Future.sequence(fs) do
-          inline def complain[A]: A = throw ju.NoSuchElementException("anchor")
-          val e                     = `div[class^="PageContent"]`(document).getOrElse(complain)
-          history.filter(_.nonEmpty).inject("mpb".elementAt(e.before(_)))
-      end if
+      val es  = `a[data-activityid]`.all(Seq(document)).filter(isRunning).toList
+      val ids = for case `data-activityid`(id) <- es yield ActivityId(id)
+      val e   = `div[class^="PageContent"]`(document).getOrElse(throw Complain("anchor"))
+      ids.inject("mpb".elementAt(e.before(_)))
       None
 
     case m =>

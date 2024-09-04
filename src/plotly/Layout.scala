@@ -1,6 +1,7 @@
 package plotly
 
 import scala.scalajs.js
+import scala.scalajs.js.JSConverters.*
 
 import typings.plotlyJs.anon.PartialLayout
 import typings.plotlyJs.anon.PartialLayoutAxis
@@ -21,24 +22,39 @@ object Layout:
       .setHeight(200)
       .setMargin(PartialMargin().setPad(4).setL(50).setR(50).setT(50).setB(50))
 
-  given intervals(using Layout[Common], Title[Intervals]): Layout[Intervals] = is =>
+  given intervals(using Layout[Common], Title[Intervals], ColorPalette[Common]): Layout[Intervals] = is =>
     inline def inside = PartialLegendBgcolor()
-      .setX(1.05)
+      .setX(1.1)
       .setY(0.5)
       .setItemclick(`false`)
       .setItemdoubleclick(`false`)
 
+    inline def yAxis = PartialLayoutAxis()
+      .setColor(0.color)
+      .setTickformat(".2f")
+      .setOverlaying(y2)
+      .setTickmodeSync
+
+    inline def yAxis2 = PartialLayoutAxis()
+      .setColor(1.color)
+      .setSide(right)
+
     Common.layout
       .setTitle(is.title)
       .setShowlegend(true)
+      .setColorPalette
       .setLegend(inside)
       .setXaxis(PartialLayoutAxis().setDtick(1.0).setTitle("圈数"))
-      .setYaxis(PartialLayoutAxis().setOverlaying(y2).setTickmodeSync)
-      .setYaxis2(PartialLayoutAxis().setSide(right))
+      .setYaxis(yAxis)
+      .setYaxis2(yAxis2)
   end intervals
 
-  given history(using Layout[Common], Title[History]): Layout[History] = h =>
-    Common.layout.setTitle(h.title).setShowlegend(false)
+  given history(using Layout[Common], Title[History], ColorPalette[Common]): Layout[History] = h =>
+    Common.layout
+      .setTitle(h.title)
+      .setShowlegend(false)
+      .setColorPalette
+      .setYaxis(PartialLayoutAxis().setTickformat(".2f").setColor(0.color))
 
   extension (a: PartialLayoutAxis)
     private inline def setTickmodeSync: PartialLayoutAxis =
