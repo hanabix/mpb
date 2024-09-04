@@ -27,6 +27,7 @@ jobs:
         generate_release_notes: true
     - name: Upload to webstore   
       uses: mnao305/chrome-extension-upload@v5.0.0
+      # https://github.com/fregante/chrome-webstore-upload-keys
       with:
         file-path: mpb.zip
         extension-id: nojpfacijldambjcnpbpneghbaefnlme
