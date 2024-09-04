@@ -30,7 +30,7 @@ object Listen:
   given tuple[A, H, T <: Tuple](using h: Listen[A, H], t: Listen[A, T]): Listen[A, H *: T] = (a, p) =>
     h(a, p); t(a, p)
 
-  given legendclick(using ColorPalette[Intervals]): Listen[Intervals, plotly_legendclick] = (_, p) =>
+  given legendclick(using ColorPalette[Common]): Listen[Intervals, plotly_legendclick] = (_, p) =>
     p.on(
         plotly_legendclick,
         accept[LegendClickEvent]: e =>

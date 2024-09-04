@@ -22,7 +22,7 @@ object Layout:
       .setHeight(200)
       .setMargin(PartialMargin().setPad(4).setL(50).setR(50).setT(50).setB(50))
 
-  given intervals(using Layout[Common], Title[Intervals], ColorPalette[Intervals]): Layout[Intervals] = is =>
+  given intervals(using Layout[Common], Title[Intervals], ColorPalette[Common]): Layout[Intervals] = is =>
     inline def inside = PartialLegendBgcolor()
       .setX(1.1)
       .setY(0.5)
@@ -31,7 +31,7 @@ object Layout:
 
     inline def yAxis = PartialLayoutAxis()
       .setColor(0.color)
-      .setTickformat(".2r")
+      .setTickformat(".2f")
       .setOverlaying(y2)
       .setTickmodeSync
 
@@ -42,18 +42,19 @@ object Layout:
     Common.layout
       .setTitle(is.title)
       .setShowlegend(true)
-      .setColorway(summon[ColorPalette[Intervals]].list.toJSArray)
+      .setColorPalette
       .setLegend(inside)
       .setXaxis(PartialLayoutAxis().setDtick(1.0).setTitle("圈数"))
       .setYaxis(yAxis)
       .setYaxis2(yAxis2)
   end intervals
 
-  given history(using Layout[Common], Title[History]): Layout[History] = h =>
+  given history(using Layout[Common], Title[History], ColorPalette[Common]): Layout[History] = h =>
     Common.layout
       .setTitle(h.title)
       .setShowlegend(false)
-      .setYaxis(PartialLayoutAxis().setTickformat(".2r"))
+      .setColorPalette
+      .setYaxis(PartialLayoutAxis().setTickformat(".2f").setColor(0.color))
 
   extension (a: PartialLayoutAxis)
     private inline def setTickmodeSync: PartialLayoutAxis =

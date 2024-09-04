@@ -2,22 +2,17 @@ package plotly
 
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters.*
-import typings.plotlyJs.anon.PartialScatterLine
-import typings.plotlyJs.mod.Data
-import typings.plotlyJs.mod.PlotType
-import typings.plotlyJs.plotlyJsBooleans.`false`
-import typings.plotlyJs.plotlyJsStrings.legendonly
-import typings.plotlyJs.plotlyJsStrings.y
-import core.DateFormat
-import core.metrics.*
+
+import typings.plotlyJs.anon.PartialLayout
 
 trait ColorPalette[A]:
   def list: List[String]
-  extension (i: Int) inline def color = list(i % list.length)
+  extension (i: Int) inline def color                     = list(i % list.length)
+  extension (a: PartialLayout) inline def setColorPalette = a.setColorway(list.toJSArray)
 end ColorPalette
 
 object ColorPalette:
-  given ColorPalette[Intervals] with
+  given  ColorPalette[Common] with
     val list: List[String] = List(
         "#1f77b4",
         "#ff7f0e",

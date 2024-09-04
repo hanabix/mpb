@@ -9,6 +9,7 @@ import typings.plotlyJs.mod.PlotType
 import typings.plotlyJs.plotlyJsBooleans.`false`
 import typings.plotlyJs.plotlyJsStrings.legendonly
 import typings.plotlyJs.plotlyJsStrings.y
+import typings.plotlyJs.plotlyJsStrings.yPlussignname
 
 import core.DateFormat
 import core.metrics.*
@@ -26,6 +27,7 @@ object DataArrayFrom:
         .setLine(PartialScatterLine().setWidth(1))
         .setY(v.map(fy).toJSArray)
         .setX(v.indices.map(_ + 1.0).toJSArray)
+        .setHoverinfo(yPlussignname)
 
     js.Array(
         scatterLine("mpb", _.mpb).setShowlegend(false),
