@@ -42,5 +42,4 @@ object Activities:
   private val `a.inline-edit-target`   = implicitly[Name].value |> Selector[Seq]
   private val `div.advanced-filtering` = implicitly[Name].value |> Selector[Id]
 
-  extension [A](a: A) inline def |>[B](f: A => B): B = f(a)
 end Activities

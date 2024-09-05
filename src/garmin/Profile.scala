@@ -40,5 +40,4 @@ object Profile:
   private val `div[class^="PageContent"]`  = implicitly[Name].value |> Selector[Id]
   private val `i[class^="icon-activity-"]` = implicitly[Name].value |> Selector[Id]
 
-  extension [A](a: A) inline def |>[B](f: A => B): B = f(a)
 end Profile
