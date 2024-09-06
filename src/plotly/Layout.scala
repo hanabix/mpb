@@ -45,7 +45,7 @@ object Layout:
       .setShowlegend(true)
       .setColorPalette
       .setLegend(inside)
-      .setXaxis(PartialLayoutAxis().setTicksuffix("m").setTickmode(array))
+      .setXaxis(PartialLayoutAxis().setTickformat("~s").setTicksuffix("m").setTickmode(array))
       .setYaxis(yAxis)
       .setYaxis2(yAxis2)
   end intervals
