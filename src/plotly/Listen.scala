@@ -2,24 +2,19 @@ package plotly
 
 import scala.language.implicitConversions
 import scala.scalajs.js
-import scala.scalajs.js.JSConverters.*
 
 import org.scalajs.dom.HTMLElement
 
-import typings.plotlyJs.anon.PartialLayout
-import typings.plotlyJs.anon.PartialLayoutAxis
 import typings.plotlyJs.anon.PartialPlotDataAutobinx
 import typings.plotlyJs.anon.PartialScatterLine
 import typings.plotlyJs.mod.LegendClickEvent
 import typings.plotlyJs.mod.PlotlyHTMLElement
 import typings.plotlyJs.mod.PlotMouseEvent
-import typings.plotlyJs.plotlyJsStrings.legendonly
 import typings.plotlyJs.plotlyJsStrings.plotly_hover
 import typings.plotlyJs.plotlyJsStrings.plotly_legendclick
 import typings.plotlyJs.plotlyJsStrings.plotly_unhover
-import typings.plotlyJs.plotlyJsStrings.right
-import typings.plotlyJsDistMin.mod.relayout
 import typings.plotlyJsDistMin.mod.restyle
+import typings.plotlyJsDistMin.mod.react
 
 import core.metrics.*
 
@@ -31,18 +26,16 @@ object Listen:
   given tuple[A, H, T <: Tuple](using h: Listen[A, H], t: Listen[A, T]): Listen[A, H *: T] = (a, p) =>
     h(a, p); t(a, p)
 
-  given legendclick(using ColorPalette[Common]): Listen[Intervals, plotly_legendclick] = (_, p) =>
+  given legendclick(using ColorPalette[Common], Correlate[Intervals]): Listen[Intervals, plotly_legendclick] = (i, p) =>
     p.on(
         plotly_legendclick,
         accept[LegendClickEvent]: e =>
           e.curveNumber.toInt match
             case 0 =>
-            case i =>
-              val (l, r) = Range(1, e.data.length).partition(_ == i)
-              restyle(p, PartialPlotDataAutobinx().setVisible(true), l.map(_.doubleValue).toJSArray)
-              restyle(p, PartialPlotDataAutobinx().setVisible(legendonly), r.map(_.doubleValue).toJSArray)
-              val yAxis2 = PartialLayoutAxis().setColor(i.color).setSide(right)
-              relayout(p, PartialLayout().setYaxis2(yAxis2))
+            case n => 
+              given DataArrayFrom[Intervals] = Correlate[Intervals].data(n)
+              given Layout[Intervals] = Correlate[Intervals].layout(n)
+              react(p, i.darr, i.layout)
           end match
     )
   end legendclick
