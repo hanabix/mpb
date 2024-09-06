@@ -8,14 +8,13 @@ import typings.plotlyJs.anon.PartialLegendBgcolor
 import typings.plotlyJs.mod.Data
 import typings.plotlyJs.plotlyJsBooleans.`false`
 
-
-trait Select[A]:
+trait Correlate[A]:
   def data(i: Int): DataArrayFrom[A]
   def layout(i: Int): Layout[A]
-object Select:
-  def apply[A](using s: Select[A]) = s
+object Correlate:
+  def apply[A](using s: Correlate[A]) = s
 
-  given select[A, B <: Data](
+  given [A, B <: Data](
     using SharedAxis[A, B],
     Trace["mpb", A, B],
     Trace["bpm", A, B],
@@ -23,7 +22,7 @@ object Select:
     Trace["/km", A, B],
     Layout[A],
     ColorPalette[Common]
-  ): Select[A] with
+  ): Correlate[A] with
     private val secondaries = List(
         Trace["bpm", A, B],
         Trace["spm", A, B],
@@ -43,6 +42,6 @@ object Select:
         case (t, n) if n + 1 == i => t.data(a)
         case (t, _)               => t.dummy(a)
       (h :: t).map(SharedAxis[A, B].share(a)).toJSArray
-  end select
+  end given
 
-end Select
+end Correlate

@@ -26,15 +26,15 @@ object Listen:
   given tuple[A, H, T <: Tuple](using h: Listen[A, H], t: Listen[A, T]): Listen[A, H *: T] = (a, p) =>
     h(a, p); t(a, p)
 
-  given legendclick(using ColorPalette[Common], Select[Intervals]): Listen[Intervals, plotly_legendclick] = (i, p) =>
+  given legendclick(using ColorPalette[Common], Correlate[Intervals]): Listen[Intervals, plotly_legendclick] = (i, p) =>
     p.on(
         plotly_legendclick,
         accept[LegendClickEvent]: e =>
           e.curveNumber.toInt match
             case 0 =>
             case n => 
-              given DataArrayFrom[Intervals] = Select[Intervals].data(n)
-              given Layout[Intervals] = Select[Intervals].layout(n)
+              given DataArrayFrom[Intervals] = Correlate[Intervals].data(n)
+              given Layout[Intervals] = Correlate[Intervals].layout(n)
               react(p, i.darr, i.layout)
           end match
     )

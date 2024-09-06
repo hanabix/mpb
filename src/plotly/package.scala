@@ -27,7 +27,7 @@ private[plotly] given Conversion[PlotlyHTMLElement, HTMLElement] = _.asInstanceO
 
 given history(
   using Render[History],
-  Select[Intervals],
+  Correlate[Intervals],
   Config[Trend[ModeBarButton]],
   Listen[Intervals, plotly_legendclick],
   Listen[History, plotly_hover]
@@ -35,8 +35,8 @@ given history(
   case (r, h) =>
     inline def back                = ModeBarButton((_, _) => history(r -> h), Icons.home, "back", "回退")
     given Config[Intervals]        = i => (i -> back).config
-    given DataArrayFrom[Intervals] = Select[Intervals].data(1)
-    given Layout[Intervals]        = Select[Intervals].layout(1)
+    given DataArrayFrom[Intervals] = Correlate[Intervals].data(1)
+    given Layout[Intervals]        = Correlate[Intervals].layout(1)
     given Render[Intervals]        = Render[Intervals]
 
     h.render(r)
