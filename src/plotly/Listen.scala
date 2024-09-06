@@ -1,5 +1,6 @@
 package plotly
 
+import scala.language.implicitConversions
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters.*
 
@@ -8,6 +9,7 @@ import org.scalajs.dom.HTMLElement
 import typings.plotlyJs.anon.PartialLayout
 import typings.plotlyJs.anon.PartialLayoutAxis
 import typings.plotlyJs.anon.PartialPlotDataAutobinx
+import typings.plotlyJs.anon.PartialScatterLine
 import typings.plotlyJs.mod.LegendClickEvent
 import typings.plotlyJs.mod.PlotlyHTMLElement
 import typings.plotlyJs.mod.PlotMouseEvent
@@ -20,7 +22,6 @@ import typings.plotlyJsDistMin.mod.relayout
 import typings.plotlyJsDistMin.mod.restyle
 
 import core.metrics.*
-import typings.plotlyJs.anon.PartialScatterLine
 
 type Context[A] = (A, PlotlyHTMLElement)
 trait Listen[A, B] extends (Context[A] => Unit)

@@ -13,7 +13,7 @@ object root extends RootModule with ScalaJSModule with ScalablyTyped {
   }
 
   override def scalacOptions: Target[Seq[String]] = T {
-    super.scalacOptions() ++ Seq("-Wunused:all")
+    super.scalacOptions() ++ Seq("-Wunused:all", "-feature")
   }
 
   object test extends ScalaJSTests {

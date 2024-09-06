@@ -20,13 +20,18 @@ trait DataArrayFrom[A] extends (A => js.Array[Data]):
 object DataArrayFrom:
 
   given intervals(using Performance[Interval]): DataArrayFrom[Intervals] = v =>
+    val distances = 
+      val (_, r) = v.foldLeft(0.0 -> List.empty[Meter]):
+        case ((a, t), i) => (i.distance + a) -> (i.distance + a :: t)
+      r.map(_.round).reverse
+
     def scatterLine[A <: Double](name: String, fy: Interval => A) =
       Data
         .PartialPlotDataAutobinx()
         .setName(name)
         .setLine(PartialScatterLine().setWidth(1))
         .setY(v.map(fy).toJSArray)
-        .setX(v.indices.map(_ + 1.0).toJSArray)
+        .setX(distances.toJSArray)
         .setHoverinfo(yPlussignname)
 
     js.Array(

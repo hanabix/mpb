@@ -19,3 +19,5 @@ private[garmin] val Attribute = LiteralExtract[Element, String]: key =>
 
 private[garmin] class LiteralExtract[A, B](f: String => A => Option[B]) extends (String => PartialFunction[A, B]):
   def apply(s: String) = f(s).unlift
+
+extension [A](a: A) private[garmin] inline def |>[B](f: A => B): B = f(a)
