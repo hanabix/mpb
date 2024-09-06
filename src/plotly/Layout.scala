@@ -12,6 +12,7 @@ import typings.plotlyJs.plotlyJsStrings.right
 import typings.plotlyJs.plotlyJsStrings.y2
 
 import core.metrics.*
+import typings.plotlyJs.plotlyJsStrings.array
 
 trait Layout[A] extends (A => PartialLayout):
   extension (a: A) inline def layout = this(a)
@@ -44,7 +45,7 @@ object Layout:
       .setShowlegend(true)
       .setColorPalette
       .setLegend(inside)
-      .setXaxis(PartialLayoutAxis().setDtick(1.0).setTitle("圈数"))
+      .setXaxis(PartialLayoutAxis().setTicksuffix("m").setTickmode(array))
       .setYaxis(yAxis)
       .setYaxis2(yAxis2)
   end intervals
