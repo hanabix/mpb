@@ -55,9 +55,4 @@ object DataArrayFrom:
     m.filter(_.nonEmpty).map(box).toJSArray
 
   extension (d: Double) inline def round = scala.scalajs.js.Math.round(d)
-  extension (i: Intervals)
-    inline def distances =
-      val (_, r) = i.foldLeft(0.0 -> List.empty[Meter]):
-        case ((a, t), d) => (d.distance + a) -> (d.distance + a :: t)
-      r.map(_.round).reverse
 end DataArrayFrom
