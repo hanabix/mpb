@@ -47,7 +47,7 @@ object Trace:
   given bpm: Trace["bpm", Intervals, LineData] = new Secondary(_.map(_.averageHR.round))
   given spm: Trace["spm", Intervals, LineData] = new Secondary(_.map(_.averageRunCadence.round))
   given pace: Trace["/km", Intervals, LineData] with
-    private val s           = new Secondary["/km", Intervals](_.map(_.`/km`).reverse)
+    private val s           = new Secondary["/km", Intervals](_.map(_.`/km`))
     def y(color: String)    = s.y(color).setTickformat("%M:%S").setAutorange(reversed)
     def data(a: Intervals)  = s.data(a)
     def dummy(a: Intervals) = s.dummy(a)
