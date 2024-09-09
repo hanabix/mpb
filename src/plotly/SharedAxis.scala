@@ -22,5 +22,5 @@ object SharedAxis:
     def share(a: Intervals): PartialPlotDataAutobinx => PartialPlotDataAutobinx =
       val (_, r) = a.foldLeft(0.0 -> List.empty[Meter]):
         case ((s, t), i) => (i.distance + s) -> (i.distance + s :: t)
-      r.map(_.round).reverse
-      _.setX(r.toJSArray)
+      println(r.reverse) 
+      _.setX(r.reverse.toJSArray)
