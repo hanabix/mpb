@@ -1,82 +1,47 @@
 package plotly
 
+import scala.language.implicitConversions
 import scala.scalajs.js
-import scala.scalajs.js.JSConverters.*
 
-import typings.plotlyJs.anon.PartialLayoutAxis
-import typings.plotlyJs.anon.PartialPlotDataAutobinx as LineData
 import typings.plotlyJs.anon.PartialScatterLine
 import typings.plotlyJs.mod.Data
 import typings.plotlyJs.mod.Datum
-import typings.plotlyJs.plotlyJsStrings.legendonly
-import typings.plotlyJs.plotlyJsStrings.reversed
-import typings.plotlyJs.plotlyJsStrings.right
-import typings.plotlyJs.plotlyJsStrings.y2
+import typings.plotlyJs.mod.PlotType
+import typings.plotlyJs.plotlyJsBooleans.`false`
+import typings.plotlyJs.plotlyJsStrings.y
 import typings.plotlyJs.plotlyJsStrings.yPlussignname
 
-import core.metrics.*
+import convs.given
+import core.{Timestamp as date, *}
+import core.Gauge.MeterPerBeat as mpb
 
-trait Trace[T <: String: ValueOf, A, B <: Data]:
-  val name = valueOf[T]
-  def data(a: A): B
-  def dummy(a: A): B
-  def y(color: String): PartialLayoutAxis
+opaque type Trace[T, A] = A => List[Data]
 object Trace:
-  def apply[T <: String: ValueOf, A, B <: Data](using s: Trace[T, A, B]) = s
+  def apply[T, A](a: A)(using t: Trace[T, A]): List[Data] = t(a)
 
-  given primary(
-    using Performance[Interval]
-  ): Trace["mpb", Intervals, LineData] with
-    def y(color: String) = PartialLayoutAxis()
-      .setColor(color)
-      .setTickformat(".2f")
-      .setOverlaying(y2)
-      .setTickmodeSync
-
-    def data(a: Intervals) = Data
+  given [M <: Gauge, A, B <: Datum](using Read[M, A, B], ValueOf[M]): Trace[M, Interval[A]] = (h, t) =>
+    inline def head = Data
       .PartialPlotDataAutobinx()
-      .setName(name)
-      .setLine(PartialScatterLine().setWidth(1))
+      .setName(valueOf[M].label)
       .setHoverinfo(yPlussignname)
-      .setYaxis("y")
-      .setY(a.map(_.mpb).toJSArray)
-
-    def dummy(a: Intervals) = throw UnsupportedOperationException()
-  end primary
-
-  given bpm: Trace["bpm", Intervals, LineData] = new Secondary(_.map(_.averageHR.round))
-  given spm: Trace["spm", Intervals, LineData] = new Secondary(_.map(_.averageRunCadence.round))
-  given pace: Trace["/km", Intervals, LineData] with
-    private val s           = new Secondary["/km", Intervals](_.map(_.`/km`))
-    def y(color: String)    = s.y(color).setTickformat("%M:%S").setAutorange(reversed)
-    def data(a: Intervals)  = s.data(a)
-    def dummy(a: Intervals) = s.dummy(a)
-  end pace
-
-  private class Secondary[T <: String: ValueOf, A](f: A => Seq[Datum]) extends Trace[T, A, LineData]:
-    def y(color: String) = PartialLayoutAxis()
-      .setColor(color)
-      .setSide(right)
-
-    def data(a: A) = dummy(a).setVisible(true).setY(f(a).toJSArray)
-
-    def dummy(a: A) = Data
-      .PartialPlotDataAutobinx()
-      .setVisible(legendonly)
-      .setName(name)
       .setLine(PartialScatterLine().setWidth(1))
-      .setHoverinfo(yPlussignname)
-      .setYaxis("y2")
-  end Secondary
+      .setY((h :: t).map(Read[M, A, B]))
+    head :: Nil
 
-  extension (d: Double) private inline def round = scala.scalajs.js.Math.round(d)
-  extension (i: Interval)
-    private inline def `/km` =
-      val s = math.round(i.pace * 1000).intValue
-      new js.Date(0, 0, 0, s / (60 * 60), s / 60, s % 60)
+  given [A](using Read[mpb, A, Double], Read[date, A, String], DateTimeGMT[String]): Trace[Box, History[A]] =
+    (h, t) =>
+      (h :: t).map: (h, t) =>
+        Data
+          .PartialBoxPlotData()
+          .setType(PlotType.box)
+          .setY((h :: t).map(Read[mpb, A, Double]))
+          .setHoverinfo(y)
+          .setName(Read[date, A, String](h).ymd("fr-CA"))
+          .setBoxpoints(`false`)
+          .setLine(PartialScatterLine().setWidth(1))
 
-  extension (a: PartialLayoutAxis)
-    private inline def setTickmodeSync: PartialLayoutAxis =
-      a.asInstanceOf[js.Dynamic].tickmode = "sync"
-      a
+  given [A]: Trace[EmptyTuple, A] = _ => Nil
+
+  given [H, T <: Tuple, A](using h: Trace[H, A], t: Trace[T, A]): Trace[H *: T, A] = a => h(a) ::: t(a)
+
 end Trace

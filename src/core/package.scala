@@ -4,6 +4,12 @@ import org.scalajs.dom.*
 
 type Mutation = (URL, Seq[HTMLElement])
 
+type NonEmpty[+A] = (A, List[A])
+extension [A](a: A) inline def single: NonEmpty[A] = a -> List.empty[A]
+
+type Interval[A] = NonEmpty[A]
+type History[A]  = NonEmpty[Interval[A]]
+
 trait Page[A] extends (Mutation => Option[Mutation])
 object Page:
   given any: Page[EmptyTuple] = Some(_)

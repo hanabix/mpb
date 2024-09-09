@@ -2,21 +2,17 @@ package garmin
 
 import java.util.NoSuchElementException as Complain
 
-
 import org.scalajs.dom.HTMLElement
 import org.scalajs.dom.document
 
 import core.*
-import core.metrics.*
-import core.service.Fetch
 import sourcecode.Name
 
-trait Activities
+sealed trait Activities
 object Activities:
-  given page(
-    using Initialize[HTMLElement],
-    Fetch[ActivityId, Intervals],
-    Inject[History]
+  given page(using
+    Initialize[HTMLElement],
+    Inject[List[ActivityId]]
   ): Page[Activities] =
     case (URL("/modern/activities", `activityType`("running")), `a.inline-edit-target`(_)) =>
       val es  = `a.inline-edit-target`.all(Seq(document)).toList

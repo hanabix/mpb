@@ -1,53 +1,72 @@
 package plotly
 
+import scala.language.implicitConversions
 import scala.scalajs.js
 
-import org.scalajs.dom.HTMLElement
-import org.scalajs.dom.MouseEvent
-
-import typings.plotlyJs.mod.ModeBarButton
+import typings.plotlyJs.anon.PartialConfig
+import typings.plotlyJs.anon.PartialLayout
+import typings.plotlyJs.anon.PartialLegendBgcolor
+import typings.plotlyJs.anon.PartialMargin
+import typings.plotlyJs.mod.ModeBarDefaultButtons
 import typings.plotlyJs.mod.PlotlyHTMLElement
-import typings.plotlyJs.mod.PlotMouseEvent
+import typings.plotlyJs.plotlyJsBooleans.`false`
 import typings.plotlyJs.plotlyJsStrings.plotly_click
 import typings.plotlyJs.plotlyJsStrings.plotly_hover
-import typings.plotlyJs.plotlyJsStrings.plotly_legendclick
-import typings.plotlyJsDistMin.mod.Icons
+import typings.plotlyJsDistMin.mod.newPlot
+import typings.plotlyJsDistMin.mod.react
 
-import core.Inject
-import core.metrics.*
+import convs.given
+import core.*
 
-type Trend[A] = (Intervals, A)
+type Ancestry[A] = (History[A], () => Unit)
 
-sealed trait Common
-object Common extends Common
+given PartialLegendBgcolor = PartialLegendBgcolor()
+  .setX(1.1)
+  .setY(0.5)
+  .setItemclick(`false`)
+  .setItemdoubleclick(`false`)
 
-private[plotly] inline def accept[A](f: A => Unit): js.Any => Unit = a => f(a.asInstanceOf[A])
+given (using ColorPalette): PartialLayout = PartialLayout().setColorPalette
+  .setHeight(200)
+  .setMargin(PartialMargin().setPad(4).setL(50).setR(50).setT(50).setB(50))
 
-private[plotly] given Conversion[PlotlyHTMLElement, HTMLElement] = _.asInstanceOf[HTMLElement]
+given PartialConfig =
+  PartialConfig()
+    .setResponsive(true)
+    .setDisplayModeBar(true)
+    .setModeBarButtonsToRemoveVarargs(
+      ModeBarDefaultButtons.lasso2d,
+      ModeBarDefaultButtons.select2d,
+      ModeBarDefaultButtons.pan2d,
+      ModeBarDefaultButtons.zoom2d,
+      ModeBarDefaultButtons.zoomIn2d,
+      ModeBarDefaultButtons.zoomOut2d,
+      ModeBarDefaultButtons.autoScale2d,
+      ModeBarDefaultButtons.resetScale2d
+    )
 
-given history(
-  using Render[History],
-  Correlate[Intervals],
-  Config[Trend[ModeBarButton]],
-  Listen[Intervals, plotly_legendclick],
-  Listen[History, plotly_hover]
-): Inject[History] =
-  case (r, h) =>
-    inline def back                = ModeBarButton((_, _) => history(r -> h), Icons.home, "back", "回退")
-    given Config[Intervals]        = i => (i -> back).config
-    given DataArrayFrom[Intervals] = Correlate[Intervals].data(1)
-    given Layout[Intervals]        = Correlate[Intervals].layout(1)
-    given Render[Intervals]        = Render[Intervals]
+given history[A](using
+  PartialConfig,
+  PartialLayout,
+  Trace[Box, History[A]],
+  Axis[Box],
+  Title[History[A]],
+  Listen[Ancestry[A], (plotly_click, plotly_hover)]
+): Inject[History[A]] = (r, h) =>
 
-    h.render(r)
-      .`then`: p =>
-        summon[Listen[History, plotly_hover]](h, p)
-        p.on(
-            plotly_click,
-            accept[PlotMouseEvent]: e =>
-              val i  = e.points(0).curveNumber.intValue
-              val is = h(i)
-              is.render(r).`then`(summon[Listen[Intervals, plotly_legendclick]](is, _))
-        )
+  val layout = summon[PartialLayout]
+    .setTitle(Title[History[A]](h))
+    .setShowlegend(false)
+    .setYaxis(Axis[Box].head)
+
+  val config = summon[PartialConfig]
+  val data   = Trace[Box, History[A]](h)
+
+  newPlot(r, data, layout, config).`then`: p =>
+    def back(): Unit =
+      react(r, data, layout, config.setModeBarButtonsToAddVarargs()).`then`: p =>
+        Listen[Ancestry[A], (plotly_click, plotly_hover)](h -> back, p)
+
+    Listen[Ancestry[A], (plotly_click, plotly_hover)](h -> back, p)
 
 end history
