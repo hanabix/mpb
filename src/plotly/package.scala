@@ -46,7 +46,7 @@ given history(
             plotly_click,
             accept[PlotMouseEvent]: e =>
               val i  = e.points(0).curveNumber.intValue
-              val is = h(i)
+              val is = h(i).reverse
               is.render(r).`then`(summon[Listen[Intervals, plotly_legendclick]](is, _))
         )
 
