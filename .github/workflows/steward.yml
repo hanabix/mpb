@@ -15,6 +15,12 @@ jobs:
     name: Scala Steward
     steps:
       - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+      - run: npm ci
       - name: Scala Steward
         uses: scala-steward-org/scala-steward-action@v2
         with:
