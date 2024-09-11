@@ -26,6 +26,11 @@
 [vomax]: https://www.garmin.com.cn/minisite/garmin-technology/firstbeat/#vo2max-fitness-level
 [lt]: https://www.garmin.com.cn/minisite/garmin-technology/firstbeat/#lactate-threshold
 
+### 更多
+
+- [为什么我开始看重跑步时的心率](https://zhongl.fun/post/meters-per-beat/)
+- [我是怎么分析跑步数据的](https://zhongl.fun/post/using-meters-per-beat/)
+
 ## 用前提示
 
 你需要：
