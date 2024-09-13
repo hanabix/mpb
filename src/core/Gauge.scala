@@ -17,8 +17,3 @@ object Gauge:
   type BeatPerMinute = BeatPerMinute.type
   type StepPerMinute = StepPerMinute.type
   type Pace          = Pace.type
-
-trait Distance
-trait Duration
-trait Timestamp
-trait Box
