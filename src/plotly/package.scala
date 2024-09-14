@@ -51,7 +51,7 @@ given history[A](using
   Trace[Box, History[A]],
   Axis[Box],
   Title[History[A]],
-  Listen[Ancestry[A], (plotly_click, plotly_hover)]
+  Listen[(plotly_click, plotly_hover), Ancestry[A]]
 ): Inject[History[A]] = (r, h) =>
 
   val layout = summon[PartialLayout]
@@ -63,10 +63,7 @@ given history[A](using
   val data   = Trace[Box, History[A]](h)
 
   newPlot(r, data, layout, config).`then`: p =>
-    def back(): Unit =
-      react(r, data, layout, config.setModeBarButtonsToAddVarargs()).`then`: p =>
-        Listen[Ancestry[A], (plotly_click, plotly_hover)](h -> back, p)
-
-    Listen[Ancestry[A], (plotly_click, plotly_hover)](h -> back, p)
+    def back(): Unit = react(r, data, layout, config.setModeBarButtonsToAddVarargs())
+    Listen[(plotly_click, plotly_hover), Ancestry[A]](h -> back, p)
 
 end history

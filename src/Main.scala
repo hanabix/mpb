@@ -27,10 +27,10 @@ object Main:
 
   end main
 
-  type Activity = Interval[js.Dynamic]
-  type X        = Distance
-  type Y        = Gauge.MeterPerBeat
-  type Y2       = Gauge.BeatPerMinute *: Gauge.StepPerMinute *: Gauge.Pace *: EmptyTuple
-  given CorrelatePlot[Activity] = CorrelatePlot[X, Y, Y2, Activity]
+  type A  = js.Dynamic
+  type X  = Distance
+  type Y  = Gauge.MeterPerBeat
+  type Y2 = Gauge.BeatPerMinute *: Gauge.StepPerMinute *: Gauge.Pace *: EmptyTuple
+  given CorrelatePlot[Interval[A]] = CorrelatePlot[X, Y, Y2, Interval[A]]
 
 end Main

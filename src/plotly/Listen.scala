@@ -24,15 +24,15 @@ import typings.plotlyJsDistMin.mod.restyle
 import convs.{*, given}
 import core.*
 
-opaque type Listen[A, B] = (A, PlotlyHTMLElement) => Unit
+opaque type Listen[T, A] = (A, PlotlyHTMLElement) => Unit
 object Listen:
-  def apply[A, B](a: A, p: PlotlyHTMLElement)(using l: Listen[A, B]) = l(a, p)
+  def apply[T, A](a: A, p: PlotlyHTMLElement)(using l: Listen[T, A]) = l(a, p)
 
-  given empty[A]: Listen[A, EmptyTuple] = (_, _) => ()
-  given tuple[A, H, T <: Tuple](using h: Listen[A, H], t: Listen[A, T]): Listen[A, H *: T] = (a, p) =>
+  given empty[A]: Listen[EmptyTuple, A] = (_, _) => ()
+  given tuple[H, T <: Tuple, A](using h: Listen[H, A], t: Listen[T, A]): Listen[H *: T, A] = (a, p) =>
     h(a, p); t(a, p)
 
-  given [A](using CorrelatePlot[Interval[A]]): Listen[Interval[A], plotly_legendclick] = (is, p) =>
+  given [A](using CorrelatePlot[Interval[A]]): Listen[plotly_legendclick, Interval[A]] = (is, p) =>
     val select = is.plot(react(p, _, _))
     p.on(
       plotly_legendclick,
@@ -41,7 +41,7 @@ object Listen:
     )
   end given
 
-  given [A]: Listen[A, plotly_hover] = (_, p) =>
+  given [A]: Listen[plotly_hover, A] = (_, p) =>
     val area: HTMLElement = p.querySelector(".nsewdrag")
     p.on_plotlyhover(
       plotly_hover,
@@ -61,9 +61,9 @@ object Listen:
 
   given [A](using
     PartialConfig,
-    Listen[Interval[A], plotly_legendclick],
+    Listen[plotly_legendclick, Interval[A]],
     CorrelatePlot[Interval[A]]
-  ): Listen[Ancestry[A], plotly_click] =
+  ): Listen[plotly_click, Ancestry[A]] =
     case (((h, t), back), p) =>
       val conf = summon[PartialConfig].setModeBarButtonsToAddVarargs:
         ModeBarButton((_, _) => back(), Icons.home, "back", "回退")
@@ -76,7 +76,7 @@ object Listen:
 
           val ia = (h :: t)(curve.intValue)
           val select = ia.plot: (data, layout) =>
-            newPlot(p, data, layout, conf).`then`(Listen[Interval[A], plotly_legendclick](ia, _))
+            newPlot(p, data, layout, conf).`then`(Listen[plotly_legendclick, Interval[A]](ia, _))
           select(1)
       )
   end given
