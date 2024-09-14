@@ -4,15 +4,16 @@ import org.scalajs.dom.*
 
 type Mutation = (URL, Seq[HTMLElement])
 
-trait Page[A] extends (Mutation => Option[Mutation])
-object Page:
-  given any: Page[EmptyTuple] = Some(_)
+type NonEmpty[+A] = (A, List[A])
+extension [A](a: A) inline def single: NonEmpty[A] = a -> List.empty[A]
 
-  given tuple[H, T <: Tuple](using h: Page[H], t: Page[T]): Page[H *: T] =
-    a => h(a).flatMap(t)
+type Interval[A] = NonEmpty[A]
+type History[A]  = NonEmpty[Interval[A]]
 
-  def apply[A](using pa: Page[A]) = pa
-end Page
+sealed trait Distance
+sealed trait Duration
+sealed trait Timestamp
+sealed trait Box
 
 type Injection[A] = (HTMLElement, A)
 trait Inject[A] extends (Injection[A] => Unit):

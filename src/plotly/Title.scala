@@ -1,12 +1,15 @@
 package plotly
+import core.*
 
-import core.DateTimeGMT
-import core.metrics.*
-
-trait Title[A] extends (A => String):
-  extension (a: A) inline def title = this(a)
+opaque type Title[A] = A => String
 object Title:
-  given date(using DateTimeGMT[String]): Title[Intervals] = oi =>
-    s"${(oi.head.startTimeGMT).ymd("fr-CA")} 速心比关联走势"
-  given Title[History] = _ => "速心比分布走势"
+  def apply[A](a: A)(using t: Title[A]): String = t(a)
+  def apply[A](f: A => String): Title[A]        = f
+
+  given [A](using Read[Timestamp, A, String], DateTimeGMT[String]): Title[Interval[A]] = Title: (h, _) =>
+    s"${Read[Timestamp, A, String](h).ymd("fr-CA")} 速心比关联走势"
+
+  given [A]: Title[History[A]] = Title: _ =>
+    "速心比分布走势"
+
 end Title
