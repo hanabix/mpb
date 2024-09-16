@@ -3,21 +3,22 @@ package garmin.read
 import scala.scalajs.js
 
 import core.*
+import core.Safety
 
-given Read[Gauge.BeatPerMinute, js.Dynamic, Double] = Read: a =>
-  a.averageHR.asInstanceOf[Double].round
+given Read[Gauge.BeatPerMinute, js.Dynamic, Double] = Read:
+  Safety[Lap, Double](_.averageHR.round)
 
-given Read[Gauge.StepPerMinute, js.Dynamic, Double] = Read: a =>
-  a.averageRunCadence.asInstanceOf[Double].round
+given Read[Gauge.StepPerMinute, js.Dynamic, Double] = Read:
+  Safety[Lap, Double](_.averageRunCadence.round)
 
-given Read[Distance, js.Dynamic, Double] = Read: a =>
-  a.distance.asInstanceOf[Double]
+given Read[Distance, js.Dynamic, Double] = Read:
+  Safety[Lap, Double](_.distance.round)
 
-given Read[Duration, js.Dynamic, Double] = Read: a =>
-  a.duration.asInstanceOf[Double]
+given Read[Duration, js.Dynamic, Double] = Read:
+  Safety[Lap, Double](_.duration.round)
 
-given Read[Timestamp, js.Dynamic, String] = Read: a =>
-  a.startTimeGMT.asInstanceOf[String]
+given Read[Timestamp, js.Dynamic, String] = Read:
+  Safety[Lap, String](_.startTimeGMT)
 
 given [A](using
   Read[Distance, A, Double],
@@ -41,3 +42,10 @@ given [A](using
 end given
 
 extension (d: Double) private inline def round = js.Math.round(d)
+
+private type Lap = Safety:
+  val averageHR: Double
+  val averageRunCadence: Double
+  val distance: Double
+  val duration: Double
+  val startTimeGMT: String
