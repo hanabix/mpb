@@ -4,12 +4,9 @@ import scala.language.implicitConversions
 import scala.scalajs.js
 
 import typings.plotlyJs.anon.PartialScatterLine
-import typings.plotlyJs.mod.Data
-import typings.plotlyJs.mod.Datum
-import typings.plotlyJs.mod.PlotType
+import typings.plotlyJs.mod.{Gauge as _, *}
 import typings.plotlyJs.plotlyJsBooleans.`false`
-import typings.plotlyJs.plotlyJsStrings.y
-import typings.plotlyJs.plotlyJsStrings.yPlussignname
+import typings.plotlyJs.plotlyJsStrings.*
 
 import convs.given
 import core.*

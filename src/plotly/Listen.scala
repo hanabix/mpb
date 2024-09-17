@@ -1,6 +1,5 @@
 package plotly
 
-import scala.language.implicitConversions
 import scala.scalajs.js
 
 import typings.plotlyJs.mod.PlotlyHTMLElement
@@ -13,7 +12,7 @@ object Listen:
     inline def handler(d: js.Any): Unit = f(d.asInstanceOf[e.Data])
     p.asInstanceOf[js.Dynamic].applyDynamic("on")(e.instance, handler)
 
-  given [T <: js.Any, B](using e: Event[T])(using Registry[B, e.Data]): Listen[T, B] =
+  given [T <: js.Any, A](using e: Event[T])(using Registry[A, e.Data]): Listen[T, A] =
     (p, b) => Listen[T](p)(b.handler(p, _))
 
   given [A]: Listen[EmptyTuple, A] = (_, _) => ()

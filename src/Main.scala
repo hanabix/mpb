@@ -1,11 +1,6 @@
 import scala.scalajs.js
 
-import org.scalajs.dom.HTMLElement
-import org.scalajs.dom.MutationObserver
-import org.scalajs.dom.MutationObserverInit
-import org.scalajs.dom.URL
-import org.scalajs.dom.document
-import org.scalajs.dom.window
+import org.scalajs.dom.*
 
 import core.*
 import garmin.*

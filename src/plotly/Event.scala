@@ -1,22 +1,12 @@
 package plotly
 
-import scala.language.implicitConversions
-
-
-import typings.plotlyJs.mod.LegendClickEvent
-import typings.plotlyJs.mod.PlotHoverEvent
-import typings.plotlyJs.mod.PlotMouseEvent
-import typings.plotlyJs.plotlyJsStrings.plotly_click
-import typings.plotlyJs.plotlyJsStrings.plotly_hover
-import typings.plotlyJs.plotlyJsStrings.plotly_legendclick
-import typings.plotlyJs.plotlyJsStrings.plotly_unhover
-
+import typings.plotlyJs.mod.*
+import typings.plotlyJs.plotlyJsStrings.*
 
 trait Event[A]:
   type Data
   def instance: A
 object Event:
-  def apply[A](using e: Event[A]) = e
 
   given Event[plotly_click] with
     type Data = PlotMouseEvent

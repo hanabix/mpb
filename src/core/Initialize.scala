@@ -1,20 +1,24 @@
 package core
 
-import org.scalajs.dom.Element
+import org.scalajs.dom.*
 import org.scalajs.dom.HTMLDivElement as Div
-import org.scalajs.dom.Node
-import org.scalajs.dom.document
 
-type Initialization = (String, Node => Unit)
-trait Initialize[+A <: Element] extends (Initialization => A):
+trait Initialize[+A <: Element]:
   extension (id: String)
-    inline def elementAt(pos: Node => Unit) = this(id, pos)
-    inline def reset(): Unit                = this(id, _ => ())
+    def elementAt(pos: Node => Unit): A
+    def reset(): Unit
 
 object Initialize:
-  given html: Initialize[Div] = (id, pos) =>
-    Option(document.getElementById(id)).foreach(_.remove())
-    val a = document.createElement("div").asInstanceOf[Div]
-    a.id = id
-    pos(a)
-    a
+  given Initialize[Div] with
+    extension (id: String)
+      def reset(): Unit                     = init(id, _ => ())
+      def elementAt(pos: Node => Unit): Div = init(id, pos)
+
+    private inline def init(id: String, pos: Node => Unit) =
+      Option(document.getElementById(id)).foreach(_.remove())
+      val a = document.createElement("div").asInstanceOf[Div]
+      a.id = id
+      pos(a)
+      a
+  end given
+end Initialize

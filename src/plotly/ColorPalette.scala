@@ -2,8 +2,7 @@ package plotly
 
 import scala.language.implicitConversions
 
-import typings.plotlyJs.anon.PartialLayout
-import typings.plotlyJs.anon.PartialLayoutAxis
+import typings.plotlyJs.anon.*
 
 import convs.given
 

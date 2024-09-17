@@ -24,11 +24,10 @@ object Profile:
   end page
 
   private inline def isRunning(e: Element): Boolean =
-    val t = for
+    (for
       case `class`(s"icon-activity-${t}") <- `i[class^="icon-activity-"]`(e)
       if t.endsWith("running")
-    yield t
-    t.isDefined
+    yield t).isDefined
   end isRunning
 
   private val `class`                      = implicitly[Name].value |> Attribute

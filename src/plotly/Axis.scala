@@ -3,10 +3,7 @@ package plotly
 import scala.scalajs.js
 
 import typings.plotlyJs.anon.PartialLayoutAxis
-import typings.plotlyJs.plotlyJsStrings.array
-import typings.plotlyJs.plotlyJsStrings.reversed
-import typings.plotlyJs.plotlyJsStrings.right
-import typings.plotlyJs.plotlyJsStrings.y2
+import typings.plotlyJs.plotlyJsStrings.*
 
 import core.*
 

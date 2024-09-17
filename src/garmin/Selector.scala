@@ -1,7 +1,6 @@
 package garmin
 
-import org.scalajs.dom.Element
-import org.scalajs.dom.NodeSelector
+import org.scalajs.dom.*
 
 final class Selector[F[_]: FlatMapwise](expr: String):
 
@@ -11,6 +10,6 @@ final class Selector[F[_]: FlatMapwise](expr: String):
   object all:
     def apply(fa: F[NodeSelector]): Seq[Element]      = fa.seq(s => s.querySelectorAll(expr))
     def unapplySeq(fa: F[NodeSelector]): Seq[Element] = this(fa)
-end Selector
+    
 object Selector:
   def apply[F[_]: FlatMapwise]: String => Selector[F] = new Selector[F](_) 

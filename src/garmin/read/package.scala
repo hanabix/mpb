@@ -3,7 +3,6 @@ package garmin.read
 import scala.scalajs.js
 
 import core.*
-import core.Safety
 
 given Read[Gauge.BeatPerMinute, js.Dynamic, Double] = Read:
   Safety[Lap, Double](_.averageHR.round)

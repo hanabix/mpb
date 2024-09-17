@@ -3,12 +3,9 @@ package plotly
 import scala.language.implicitConversions
 import scala.scalajs.js
 
-import typings.plotlyJs.anon.PartialLayout
-import typings.plotlyJs.anon.PartialLayoutAxis
-import typings.plotlyJs.anon.PartialLegendBgcolor
-import typings.plotlyJs.anon.PartialPlotDataAutobinx
+import typings.plotlyJs.anon.*
 import typings.plotlyJs.mod.Data
-import typings.plotlyJs.plotlyJsStrings.legendonly
+import typings.plotlyJs.plotlyJsStrings.*
 
 import convs.given
 

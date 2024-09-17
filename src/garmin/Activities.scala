@@ -2,8 +2,7 @@ package garmin
 
 import java.util.NoSuchElementException as Complain
 
-import org.scalajs.dom.HTMLElement
-import org.scalajs.dom.document
+import org.scalajs.dom.{URL as _, *}
 
 import core.*
 import sourcecode.Name
