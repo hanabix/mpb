@@ -5,20 +5,10 @@ import scala.scalajs.js
 
 import org.scalajs.dom.HTMLElement
 
-import typings.plotlyJs.anon.PartialConfig
-import typings.plotlyJs.anon.PartialLayout
-import typings.plotlyJs.anon.PartialLegendBgcolor
-import typings.plotlyJs.anon.PartialMargin
-import typings.plotlyJs.mod.LegendClickEvent
-import typings.plotlyJs.mod.ModeBarButton
-import typings.plotlyJs.mod.ModeBarDefaultButtons
-import typings.plotlyJs.mod.PlotlyHTMLElement
-import typings.plotlyJs.mod.PlotMouseEvent
+import typings.plotlyJs.anon.*
+import typings.plotlyJs.mod.{Axis as _, Icons as _, *}
 import typings.plotlyJs.plotlyJsBooleans.`false`
-import typings.plotlyJs.plotlyJsStrings.plotly_click
-import typings.plotlyJs.plotlyJsStrings.plotly_hover
-import typings.plotlyJs.plotlyJsStrings.plotly_legendclick
-import typings.plotlyJs.plotlyJsStrings.plotly_unhover
+import typings.plotlyJs.plotlyJsStrings.*
 import typings.plotlyJsDistMin.mod.Icons
 import typings.plotlyJsDistMin.mod.newPlot
 import typings.plotlyJsDistMin.mod.react
@@ -87,7 +77,7 @@ given [A](using
   Trace[Box, History[A]],
   Axis[Box],
   Title[History[A]],
-  Listen[(plotly_hover, plotly_unhover), History[A]],
+  Listen[(plotly_hover, plotly_unhover, plotly_click), History[A]],
   Listen[plotly_click, Ancestry[A]]
 ): Inject[History[A]] with
   extension (h: History[A])
@@ -102,8 +92,12 @@ given [A](using
       val data   = Trace[Box, History[A]](h)
 
       newPlot(e, data, layout, config).`then`: p =>
-        def back(): Unit = react(p, data, layout, config.setModeBarButtonsToAddVarargs())
-        Listen[(plotly_hover, plotly_unhover), History[A]](p, h)
+        def back(): Unit =
+          react(p, data, layout, config.setModeBarButtonsToAddVarargs()).`then`: _ =>
+            Listen[(plotly_hover, plotly_unhover, plotly_click), History[A]](p, h)
+            Listen[plotly_click, Ancestry[A]](p, h -> back)
+
+        Listen[(plotly_hover, plotly_unhover, plotly_click), History[A]](p, h)
         Listen[plotly_click, Ancestry[A]](p, h -> back)
 
 end given
