@@ -15,6 +15,7 @@ import typings.plotlyJs.mod.PlotMouseEvent
 import typings.plotlyJs.plotlyJsBooleans.`false`
 import typings.plotlyJs.plotlyJsStrings.plotly_click
 import typings.plotlyJs.plotlyJsStrings.plotly_hover
+import typings.plotlyJs.plotlyJsStrings.plotly_legendclick
 import typings.plotlyJs.plotlyJsStrings.plotly_unhover
 import typings.plotlyJsDistMin.mod.Icons
 import typings.plotlyJsDistMin.mod.newPlot
@@ -58,7 +59,8 @@ given [A](using
   Conversion[PlotMouseEvent, Double],
   PartialConfig,
   CorrelatePlot[Interval[A]],
-  Registry[History[A], PlotMouseEvent]
+  Registry[History[A], PlotMouseEvent],
+  Listen[plotly_legendclick, Interval[A]]
 ): Registry[Ancestry[A], PlotMouseEvent] with
   extension (a: Ancestry[A])
     def handler: Handler[PlotMouseEvent] = (p, e) =>
@@ -68,11 +70,13 @@ given [A](using
       val conf = summon[PartialConfig].setModeBarButtonsToAddVarargs:
         ModeBarButton((_, _) => back(), Icons.home, "back", "回退")
 
-      val select = (h :: t)(e.convert.intValue).plot: (data, layout) =>
-        newPlot(p, data, layout, conf)
+      val ia = (h :: t)(e.convert.intValue)
+      val select = ia.plot: (data, layout) =>
+        newPlot(p, data, layout, conf).`then`: pp =>
+          Listen[plotly_legendclick, Interval[A]](pp, ia)
 
       select(1)
-      
+
 end given
 
 given [A](using

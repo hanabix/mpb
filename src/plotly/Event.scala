@@ -1,25 +1,16 @@
 package plotly
 
 import scala.language.implicitConversions
-import scala.scalajs.js
 
-import org.scalajs.dom.HTMLElement
 
-import typings.plotlyJs.anon.PartialConfig
-import typings.plotlyJs.anon.PartialPlotDataAutobinx
-import typings.plotlyJs.anon.PartialScatterLine
 import typings.plotlyJs.mod.LegendClickEvent
-import typings.plotlyJs.mod.ModeBarButton
 import typings.plotlyJs.mod.PlotHoverEvent
-import typings.plotlyJs.mod.PlotlyHTMLElement
 import typings.plotlyJs.mod.PlotMouseEvent
 import typings.plotlyJs.plotlyJsStrings.plotly_click
 import typings.plotlyJs.plotlyJsStrings.plotly_hover
 import typings.plotlyJs.plotlyJsStrings.plotly_legendclick
 import typings.plotlyJs.plotlyJsStrings.plotly_unhover
 
-import convs.{*, given}
-import core.*
 
 trait Event[A]:
   type Data
