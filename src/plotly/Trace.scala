@@ -12,7 +12,7 @@ import typings.plotlyJs.plotlyJsStrings.y
 import typings.plotlyJs.plotlyJsStrings.yPlussignname
 
 import convs.given
-import core.{Timestamp as date, *}
+import core.*
 import core.Gauge.MeterPerBeat as mpb
 
 opaque type Trace[T, A] = A => List[Data]
@@ -28,7 +28,7 @@ object Trace:
       .setY((h :: t).map(Read[M, A, B]))
     head :: Nil
 
-  given [A](using Read[mpb, A, Double], Read[date, A, String], DateTimeGMT[String]): Trace[Box, History[A]] =
+  given [A](using Read[mpb, A, Double], Read[Timestamp, A, Timestamp]): Trace[Box, History[A]] =
     (h, t) =>
       (h :: t).map: (h, t) =>
         Data
@@ -36,7 +36,7 @@ object Trace:
           .setType(PlotType.box)
           .setY((h :: t).map(Read[mpb, A, Double]))
           .setHoverinfo(y)
-          .setName(Read[date, A, String](h).ymd("fr-CA"))
+          .setName(Read[Timestamp, A, Timestamp](h).gmtDateString("fr-CA"))
           .setBoxpoints(`false`)
           .setLine(PartialScatterLine().setWidth(1))
 

@@ -30,7 +30,7 @@ object Main:
   type A  = js.Dynamic
   type X  = Distance
   type Y  = Gauge.MeterPerBeat
-  type Y2 = Gauge.BeatPerMinute *: Gauge.StepPerMinute *: Gauge.Pace *: EmptyTuple
+  type Y2 = (Gauge.BeatPerMinute, Gauge.StepPerMinute, Gauge.Pace)
   given CorrelatePlot[Interval[A]] = CorrelatePlot[X, Y, Y2, Interval[A]]
 
 end Main

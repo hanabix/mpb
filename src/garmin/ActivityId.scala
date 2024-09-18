@@ -4,7 +4,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.scalajs.js
 
-import org.scalajs.dom.Request
+import org.scalajs.dom.HTMLElement
 
 import core.*
 import core.service.Fetch
@@ -15,31 +15,27 @@ object ActivityId:
   def apply(s: String): ActivityId = s
 
   given inject(using
-    Fetch[ActivityId, Option[Interval[js.Dynamic]]],
+    Fetch[Get, js.Dynamic],
     Inject[History[js.Dynamic]]
-  ): Inject[List[ActivityId]] = (e, ids) =>
-    for case Some(h) :: t <- Future.sequence(ids.map(_.request)) do 
-      (h -> t.map(_.toList).flatten).inject(e)
+  ): Inject[List[ActivityId]] with
+    extension (ids: List[ActivityId])
+      def inject(e: HTMLElement): Unit =
+        for case Some(h) :: t <- Future.sequence(ids.map(splits)) do (h -> t.map(_.toList).flatten).inject(e)
 
-  given fetch(using
-    Fetch[Request, js.Dynamic],
-    Conversion[Get, Request]
-  ): Fetch[ActivityId, Option[Interval[js.Dynamic]]] = id =>
+  private def splits(id: ActivityId)(using Fetch[Get, js.Dynamic]) =
     inline def url      = s"https://connect.garmin.cn/activity-service/activity/$id/splits"
     inline def referrer = s"https://connect.garmin.cn/modern/activity/$id"
 
-    for d <- Get(url, referrer).convert.request
-    yield d.asInstanceOf[Splits].lapDTOs.toList.filter(_.isActive) match
+    for d <- Get(url, referrer).request yield d.asInstanceOf[Splits].lapDTOs.toList.filter(_.isActive) match
       case h :: t => Some(h -> t)
       case _      => None
-    end for
-  end fetch
 
   private trait Lap extends js.Object:
     def intensityType: js.UndefOr[String]
 
-  extension (l: Lap) private inline def isActive =     
-    l.intensityType == "ACTIVE" || l.intensityType == "INTERVAL" || l.intensityType == js.undefined
+  extension (l: Lap)
+    private inline def isActive =
+      l.intensityType == "ACTIVE" || l.intensityType == "INTERVAL" || l.intensityType == js.undefined
 
   private trait Splits extends js.Object:
     def lapDTOs: js.Array[Lap & js.Dynamic]

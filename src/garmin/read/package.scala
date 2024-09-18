@@ -17,8 +17,9 @@ given Read[Distance, js.Dynamic, Double] = Read:
 given Read[Duration, js.Dynamic, Double] = Read:
   Safety[Lap, Double](_.duration.round)
 
-given Read[Timestamp, js.Dynamic, String] = Read:
-  Safety[Lap, String](_.startTimeGMT)
+given Read[Timestamp, js.Dynamic, Timestamp] = Read:
+  Safety[Lap, Timestamp]: d =>
+    Timestamp(d.startTimeGMT)
 
 given [A](using
   Read[Distance, A, Double],

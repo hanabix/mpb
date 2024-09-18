@@ -3,6 +3,8 @@ package plotly
 import scala.language.implicitConversions
 import scala.scalajs.js
 
+import org.scalajs.dom.HTMLElement
+
 import typings.plotlyJs.anon.PartialConfig
 import typings.plotlyJs.anon.PartialLayout
 import typings.plotlyJs.anon.PartialLegendBgcolor
@@ -87,19 +89,21 @@ given [A](using
   Title[History[A]],
   Listen[(plotly_hover, plotly_unhover), History[A]],
   Listen[plotly_click, Ancestry[A]]
-): Inject[History[A]] = (r, h) =>
+): Inject[History[A]] with
+  extension (h: History[A])
+    def inject(e: HTMLElement): Unit =
 
-  val layout = summon[PartialLayout]
-    .setTitle(Title[History[A]](h))
-    .setShowlegend(false)
-    .setYaxis(Axis[Box].head)
+      val layout = summon[PartialLayout]
+        .setTitle(Title[History[A]](h))
+        .setShowlegend(false)
+        .setYaxis(Axis[Box].head)
 
-  val config = summon[PartialConfig]
-  val data   = Trace[Box, History[A]](h)
+      val config = summon[PartialConfig]
+      val data   = Trace[Box, History[A]](h)
 
-  newPlot(r, data, layout, config).`then`: p =>
-    def back(): Unit = react(r, data, layout, config.setModeBarButtonsToAddVarargs())
-    Listen[(plotly_hover, plotly_unhover), History[A]](p, h)
-    Listen[plotly_click, Ancestry[A]](p, h -> back)
+      newPlot(e, data, layout, config).`then`: p =>
+        def back(): Unit = react(p, data, layout, config.setModeBarButtonsToAddVarargs())
+        Listen[(plotly_hover, plotly_unhover), History[A]](p, h)
+        Listen[plotly_click, Ancestry[A]](p, h -> back)
 
 end given

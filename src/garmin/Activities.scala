@@ -13,23 +13,16 @@ object Activities:
   given page(using
     Initialize[HTMLElement],
     Inject[List[ActivityId]]
-  ): Page[Activities] =
+  ): Page[Activities] = Page:
     case (URL("/modern/activities", `activityType`("running")), `a.inline-edit-target`(_)) =>
       val es  = `a.inline-edit-target`.all(Seq(document)).toList
       val e   = `div.advanced-filtering`(document).getOrElse(throw Complain("anchor"))
       val ids = for case `href`(s"/modern/activity/$id") <- es yield ActivityId(id)
       ids.inject(`mpb`.elementAt(e.before(_)))
-      None
 
     case (URL("/modern/activities", `activityType`("running")), _) =>
-      None
+    case (URL("/modern/activities", _), _)                         => `mpb`.reset()
 
-    case (URL("/modern/activities", _), _) =>
-      `mpb`.reset()
-      None
-
-    case m =>
-      Some(m)
   end page
 
   private val `mpb`                    = implicitly[Name].value
