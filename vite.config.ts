@@ -15,7 +15,7 @@ function generateManifest() {
 export default defineConfig(({ mode }) => {
   return {
     resolve: {
-      alias: [{ find: "src", replacement: "fuck", customResolver: () => `out/${mode === 'development' ? 'fastLinkJS' : 'fullLinkJS'}.dest/main.js` }]
+      alias: [{ find: "src", replacement: "useless", customResolver: () => `out/${mode === 'development' ? 'fastLinkJS' : 'fullLinkJS'}.dest/main.js` }]
     },
     optimizeDeps: {
       entries: [],
