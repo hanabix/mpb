@@ -25,7 +25,7 @@ object Trace:
       .setY((h :: t).map(Read[M, A, B]))
     head :: Nil
 
-  given [A](using Read[mpb, A, Double], Read[Timestamp, A, Timestamp]): Trace[Box, History[A]] =
+  given [A](using Read[mpb, A, Double], Read[Timestamp, A, String]): Trace[Box, History[A]] =
     (h, t) =>
       (h :: t).map: (h, t) =>
         Data
@@ -33,7 +33,7 @@ object Trace:
           .setType(PlotType.box)
           .setY((h :: t).map(Read[mpb, A, Double]))
           .setHoverinfo(y)
-          .setName(Read[Timestamp, A, Timestamp](h).gmtDateString("fr-CA"))
+          .setName(Read[Timestamp, A, String](h))
           .setBoxpoints(`false`)
           .setLine(PartialScatterLine().setWidth(1))
 

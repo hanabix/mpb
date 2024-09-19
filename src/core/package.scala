@@ -13,5 +13,6 @@ type History[A]  = NonEmpty[Interval[A]]
 
 sealed trait Distance
 sealed trait Duration
+sealed trait Timestamp
 sealed trait Box
 
