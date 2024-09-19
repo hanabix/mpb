@@ -22,6 +22,11 @@ object Main:
 
   end main
 
+  given Aka[Gauge.BeatPerMinute] = Aka("bpm")
+  given Aka[Gauge.MeterPerBeat]  = Aka("mpb")
+  given Aka[Gauge.StepPerMinute] = Aka("spm")
+  given Aka[Gauge.Pace]          = Aka("/km")
+
   type A  = js.Dynamic
   type X  = Distance
   type Y  = Gauge.MeterPerBeat

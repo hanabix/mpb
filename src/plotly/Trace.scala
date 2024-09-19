@@ -16,13 +16,13 @@ opaque type Trace[T, A] = A => List[Data]
 object Trace:
   def apply[T, A](a: A)(using t: Trace[T, A]): List[Data] = t(a)
 
-  given [M <: Gauge, A, B <: Datum](using Read[M, A, B], ValueOf[M]): Trace[M, Interval[A]] = (h, t) =>
+  given [G <: Gauge, A, B <: Datum](using Read[G, A, B], Aka[G]): Trace[G, Interval[A]] = (h, t) =>
     inline def head = Data
       .PartialPlotDataAutobinx()
-      .setName(valueOf[M].label)
+      .setName(Aka.of[G])
       .setHoverinfo(yPlussignname)
       .setLine(PartialScatterLine().setWidth(1))
-      .setY((h :: t).map(Read[M, A, B]))
+      .setY((h :: t).map(Read[G, A, B]))
     head :: Nil
 
   given [A](using Read[mpb, A, Double], Read[Timestamp, A, String]): Trace[Box, History[A]] =
