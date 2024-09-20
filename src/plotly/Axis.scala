@@ -1,5 +1,6 @@
 package plotly
 
+import scala.language.implicitConversions
 import scala.scalajs.js
 
 import typings.plotlyJs.anon.PartialLayoutAxis
@@ -12,6 +13,8 @@ object Axis:
 
   def apply[T](using a: Axis[T]): List[PartialLayoutAxis] = a
 
+  given [A]: Conversion[PartialLayoutAxis, Axis[A]] = a => a :: Nil
+
   given [A]: Axis[EmptyTuple]                                       = Nil
   given [H, T <: Tuple](using h: Axis[H], t: Axis[T]): Axis[H *: T] = h ::: t
 
@@ -19,32 +22,26 @@ object Axis:
     .setOverlaying(y2)
     .setTickformat(".2f")
     .setTickmodeSync
-    :: Nil
 
   given Axis[Gauge.BeatPerMinute] = PartialLayoutAxis()
     .setSide(right)
-    :: Nil
 
   given Axis[Gauge.StepPerMinute] = PartialLayoutAxis()
     .setSide(right)
-    :: Nil
 
   given Axis[Gauge.Pace] = PartialLayoutAxis()
     .setSide(right)
     .setTickformat("%M:%S")
     .setAutorange(reversed)
-    :: Nil
 
   given Axis[Distance] = PartialLayoutAxis()
     .setTickformat("~s")
     .setTicksuffix("m")
     .setTickmode(array)
-    :: Nil
 
   given (using ColorPalette): Axis[Box] = PartialLayoutAxis()
     .setTickformat(".2f")
     .setColorIndex(0)
-    :: Nil
 
   extension (a: PartialLayoutAxis)
     private inline def setTickmodeSync: PartialLayoutAxis =

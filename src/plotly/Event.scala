@@ -7,6 +7,7 @@ trait Event[A]:
   type Data
   def instance: A
 object Event:
+  type Aux[A, D] = Event[A] {type Data = D}
 
   given Event[plotly_click] with
     type Data = PlotMouseEvent

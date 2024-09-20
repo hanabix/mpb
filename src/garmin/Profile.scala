@@ -11,17 +11,13 @@ import sourcecode.Name
 
 sealed trait Profile
 object Profile:
-  given page(
-    using Initialize[HTMLElement],
-    Inject[List[ActivityId]]
-  ): Page[Profile] = Page:
+  given (using Initialize[HTMLElement], Inject[List[ActivityId]]): Proceed[Profile] = Proceed:
     case (URL(s"/modern/profile/$_", _), `a[data-activityid]`(_)) =>
       val es  = `a[data-activityid]`.all(Seq(document)).filter(isRunning).toList
       val ids = for case `data-activityid`(id) <- es yield ActivityId(id)
       val e   = `div[class^="PageContent"]`(document).getOrElse(throw Complain("anchor"))
       ids.inject("mpb".elementAt(e.before(_)))
-
-  end page
+  end given
 
   private inline def isRunning(e: Element): Boolean =
     (for

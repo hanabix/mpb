@@ -1,3 +1,4 @@
+import scala.language.implicitConversions
 import scala.scalajs.js
 
 import org.scalajs.dom.*
@@ -9,28 +10,30 @@ import plotly.{*, given}
 
 object Main:
 
+  given Aka[Gauge.BeatPerMinute] = "bpm"
+  given Aka[Gauge.MeterPerBeat]  = "mpb"
+  given Aka[Gauge.StepPerMinute] = "spm"
+  given Aka[Gauge.Pace]          = "/km"
+
+  given CorrelatePlot[Interval[js.Dynamic]] =
+    type X  = Distance
+    type Y  = Gauge.MeterPerBeat
+    type Y2 = (Gauge.BeatPerMinute, Gauge.StepPerMinute, Gauge.Pace)
+    CorrelatePlot[X, Y, Y2, Interval[js.Dynamic]]
+
   def main(args: Array[String]): Unit =
     val init = new MutationObserverInit:
       childList = true
       subtree = true
 
     MutationObserver: (smr, _) =>
+      type Pages = (Activities, Profile)
+
       val url   = URL(window.location.href)
       val added = smr.flatMap(_.addedNodes).collect({ case e: HTMLElement => e }).toSeq
-      Page[(Activities, Profile)](url -> added)
+      Proceed[Pages](url -> added)
     .observe(document.querySelector("div.main-body"), init)
 
   end main
-
-  given Aka[Gauge.BeatPerMinute] = Aka("bpm")
-  given Aka[Gauge.MeterPerBeat]  = Aka("mpb")
-  given Aka[Gauge.StepPerMinute] = Aka("spm")
-  given Aka[Gauge.Pace]          = Aka("/km")
-
-  type A  = js.Dynamic
-  type X  = Distance
-  type Y  = Gauge.MeterPerBeat
-  type Y2 = (Gauge.BeatPerMinute, Gauge.StepPerMinute, Gauge.Pace)
-  given CorrelatePlot[Interval[A]] = CorrelatePlot[X, Y, Y2, Interval[A]]
 
 end Main

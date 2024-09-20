@@ -11,15 +11,15 @@ import typings.plotlyJs.mod.*
 import core.*
 
 trait Style[A, B]:
-  extension (a: A) def style(e: HTMLElement): Data
+  extension (b: B) def style(e: HTMLElement): Data
 object Style:
-  given [A]: Style[History[A], PlotHoverEvent] with
+  given [A]: Style[PlotHoverEvent, History[A]] with
     extension (a: History[A])
       def style(e: HTMLElement): Data =
         e.querySelector(".nsewdrag").cursor("pointer")
         DataLineWidth(2)
 
-  given [A]: Style[History[A], PlotMouseEvent] with
+  given [A]: Style[PlotMouseEvent, History[A]] with
     extension (a: History[A])
       def style(e: HTMLElement): Data =
         e.querySelector(".nsewdrag").cursor("")
@@ -28,6 +28,7 @@ object Style:
   private inline def DataLineWidth(n: Int) =
     Data.PartialPlotDataAutobinx().setLine(PartialScatterLine().setWidth(n))
 
-  extension (e: Element) private inline def cursor(value: String): Unit = 
-    e.asInstanceOf[HTMLElement].style.cursor = value
+  extension (e: Element)
+    private inline def cursor(value: String): Unit =
+      e.asInstanceOf[HTMLElement].style.cursor = value
 end Style

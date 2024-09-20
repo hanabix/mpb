@@ -19,7 +19,7 @@ object Trace:
   given [G <: Gauge, A, B <: Datum](using Read[G, A, B], Aka[G]): Trace[G, Interval[A]] = (h, t) =>
     inline def head = Data
       .PartialPlotDataAutobinx()
-      .setName(Aka.of[G])
+      .setName(Aka[G])
       .setHoverinfo(yPlussignname)
       .setLine(PartialScatterLine().setWidth(1))
       .setY((h :: t).map(Read[G, A, B]))
@@ -37,8 +37,7 @@ object Trace:
           .setBoxpoints(`false`)
           .setLine(PartialScatterLine().setWidth(1))
 
-  given [A]: Trace[EmptyTuple, A] = _ => Nil
-
+  given [A]: Trace[EmptyTuple, A]                                                  = _ => Nil
   given [H, T <: Tuple, A](using h: Trace[H, A], t: Trace[T, A]): Trace[H *: T, A] = a => h(a) ::: t(a)
 
 end Trace

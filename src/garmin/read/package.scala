@@ -1,26 +1,19 @@
 package garmin.read
 
+import scala.language.implicitConversions
 import scala.scalajs.js
 
 import core.*
 
-given Read[Gauge.BeatPerMinute, js.Dynamic, Double] = Read:
-  Safety[Lap, Double](_.averageHR.round)
+given Read[Gauge.BeatPerMinute, js.Dynamic, Double] = Safety[Lap, Double](_.averageHR.round)
+given Read[Gauge.StepPerMinute, js.Dynamic, Double] = Safety[Lap, Double](_.averageRunCadence.round)
+given Read[Distance, js.Dynamic, Double]            = Safety[Lap, Double](_.distance.round)
+given Read[Duration, js.Dynamic, Double]            = Safety[Lap, Double](_.duration.round)
 
-given Read[Gauge.StepPerMinute, js.Dynamic, Double] = Read:
-  Safety[Lap, Double](_.averageRunCadence.round)
-
-given Read[Distance, js.Dynamic, Double] = Read:
-  Safety[Lap, Double](_.distance.round)
-
-given Read[Duration, js.Dynamic, Double] = Read:
-  Safety[Lap, Double](_.duration.round)
-
-given Read[Timestamp, js.Dynamic, String] = Read:
-  Safety[Lap, String]: d =>
-    val dt  = new js.Date(d.startTimeGMT)
-    val gmt = new js.Date(dt.getTime() - (dt.getTimezoneOffset() * 60000))
-    gmt.asInstanceOf[js.Dynamic].toLocaleDateString("fr-CA").asInstanceOf[String]
+given Read[Timestamp, js.Dynamic, String] = Safety[Lap, String]: d =>
+  val dt  = new js.Date(d.startTimeGMT)
+  val gmt = new js.Date(dt.getTime() - (dt.getTimezoneOffset() * 60000))
+  gmt.asInstanceOf[js.Dynamic].toLocaleDateString("fr-CA").asInstanceOf[String]
 
 given [A](using
   Read[Distance, A, Double],
