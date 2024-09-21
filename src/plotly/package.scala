@@ -43,7 +43,6 @@ given PartialConfig = PartialConfig()
     ModeBarDefaultButtons.zoom2d,
     ModeBarDefaultButtons.zoomIn2d,
     ModeBarDefaultButtons.zoomOut2d,
-    ModeBarDefaultButtons.autoScale2d,
     ModeBarDefaultButtons.resetScale2d
   )
 
