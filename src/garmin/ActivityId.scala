@@ -34,14 +34,14 @@ object ActivityId:
       case h :: t => Some(h -> t)
       case _      => None
 
-  private trait Lap extends js.Object:
-    def intensityType: js.UndefOr[String]
-
   private trait Splits extends js.Object:
     def lapDTOs: js.Array[js.Dynamic]
 
   sealed trait Intensity
   object Intensity:
+    private trait Lap extends js.Object:
+      def intensityType: js.UndefOr[String]
+
     given Predicate[Intensity, js.Dynamic] = Predicate: a =>
       val t = a.asInstanceOf[Lap].intensityType
       t == "ACTIVE" || t == "INTERVAL" || t == js.undefined
