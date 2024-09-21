@@ -25,11 +25,3 @@ jobs:
       with:
         files: mpb.zip
         generate_release_notes: true
-    - name: Upload to webstore   
-      # https://github.com/fregante/chrome-webstore-upload-cli
-      run: npx chrome-webstore-upload --source mpb.zip
-      env:
-        EXTENSION_ID: nojpfacijldambjcnpbpneghbaefnlme 
-        CLIENT_ID: ${{ secrets.CLIENT_ID }} 
-        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }} 
-        REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
