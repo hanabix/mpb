@@ -81,16 +81,11 @@ given [A](using
 ): Inject[History[A]] with
   extension (h: History[A])
     def inject(e: HTMLElement): Unit =
-      inline def slider = js.Dynamic.literal(
-        yaxis = js.Dynamic.literal(rangemode = "match")//, visible = false
-      ).asInstanceOf[PartialRangeSlider]
 
       val layout = summon[PartialLayout]
         .setTitle(Title[History[A]](h))
         .setShowlegend(false)
         .setYaxis(Axis[Box].head)
-        // .setXaxis(PartialLayoutAxis().setType(AxisType.category).setTickformat("%M/%S"))
-        // .setXaxis(PartialLayoutAxis().setRangeslider(slider))
 
       val config = summon[PartialConfig]
       val data   = Trace[Box, History[A]](h)
