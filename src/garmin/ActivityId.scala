@@ -14,15 +14,17 @@ opaque type ActivityId = String
 
 object ActivityId:
   def apply(s: String): ActivityId = s
+  
+  type Required = (bpm, spm, Distance, Duration, Intensity)
 
   given (using
-    Predicate[(bpm, spm, Intensity), js.Dynamic],
+    Predicate[Required, js.Dynamic],
     Fetch[Get, js.Dynamic],
     Inject[History[js.Dynamic]]
   ): Inject[List[ActivityId]] with
     extension (ids: List[ActivityId])
       def inject(e: HTMLElement): Unit =
-        for case Some(h) :: t <- Future.sequence(ids.map(splits[(bpm, spm, Intensity)])) do
+        for case Some(h) :: t <- Future.sequence(ids.map(splits[Required])) do
           (h -> t.map(_.toList).flatten).inject(e)
 
   private def splits[T](id: ActivityId)(using Fetch[Get, js.Dynamic], Predicate[T, js.Dynamic]) =
