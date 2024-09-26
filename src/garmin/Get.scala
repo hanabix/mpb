@@ -16,7 +16,7 @@ object Get:
     mode = RequestMode.cors
     credentials = RequestCredentials.include
     referrer = ref
-    body = null
+    body = undefined
 
   private inline def headersInit = Dynamic
     .literal(
