@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "release-it": "^17.6.0",
-    "typescript": "^5.5.3",
+    "typescript": "^5.7.2",
     "vite": "^6.0.2",
     "vite-plugin-web-extension": "^4.3.0",
     "chrome-webstore-upload-cli": "^3.3.1",
