@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@types/plotly.js-dist-min": "^2.3.4",
-    "@types/webextension-polyfill": "^0.10.7",
+    "@types/webextension-polyfill": "^0.12.3",
     "plotly.js-dist-min": "^2.35.2"
   }
 }
