@@ -13,3 +13,5 @@ out/
 
 # temp
 .tmp/
+
+.sdk/
