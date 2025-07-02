@@ -3,7 +3,7 @@ import mill._, scalalib._, scalajslib._, scalajslib.api._
 import $ivy.`com.github.lolgab::mill-scalablytyped::0.1.14`
 import com.github.lolgab.mill.scalablytyped._
 
-object root extends RootModule with ScalaJSModule with ScalablyTyped {
+object `package` extends RootModule with ScalaJSModule with ScalablyTyped {
   def scalaVersion   = "3.5.0"
   def scalaJSVersion = "1.16.0"
   def moduleKind     = ModuleKind.ESModule
