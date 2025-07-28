@@ -20,6 +20,6 @@
   "dependencies": {
     "@types/plotly.js-dist-min": "^2.3.4",
     "@types/webextension-polyfill": "^0.12.3",
-    "plotly.js-dist-min": "^3.0.1"
+    "plotly.js-dist-min": "^3.0.3"
   }
 }
