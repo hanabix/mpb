@@ -15,3 +15,5 @@ out/
 .tmp/
 
 .sdk/
+
+.DS_Store
