@@ -19,7 +19,7 @@ object Axis:
   given [H, T <: Tuple](using h: Axis[H], t: Axis[T]): Axis[H *: T] = h ::: t
 
   given Axis[Gauge.MeterPerBeat] = PartialLayoutAxis()
-    .setOverlaying(y2)
+    .setOverlaying("y2")
     .setTickformat(".2f")
     .setTickmodeSync
 

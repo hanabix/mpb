@@ -10,16 +10,17 @@
     "release": "release-it"
   },
   "devDependencies": {
+    "chrome-webstore-upload-cli": "^3.3.1",
     "release-it": "^19.0.4",
     "typescript": "^5.9.2",
     "vite": "^7.0.5",
     "vite-plugin-web-extension": "^4.4.5",
-    "chrome-webstore-upload-cli": "^3.3.1",
     "webextension-polyfill": "^0.12.0"
   },
   "dependencies": {
-    "@types/plotly.js-dist-min": "^2.3.4",
+    "@types/plotly.js-dist-min": "2.3.4",
+    "@types/plotly.js": "2.35.4",
     "@types/webextension-polyfill": "^0.12.3",
-    "plotly.js-dist-min": "^3.0.1"
+    "plotly.js-dist-min": "2.35.3"
   }
 }

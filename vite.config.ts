@@ -26,8 +26,8 @@ export default defineConfig(({ mode }) => {
         watchFilePaths: ["package.json", "manifest.json"],
         webExtConfig: {
           target: "chromium",
-          startUrl: ["https://connect.garmin.cn/modern"],
-          browserConsole: true
+          startUrl: ["https://connect.garmin.cn/modern/activities?activityType=running"],
+          watchFile: ["content.js", "manifest.json"],
         },
       }),
     ],
