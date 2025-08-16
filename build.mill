@@ -11,7 +11,7 @@ import scalajslib.api.*
 import scalalib.*
 
 object `package` extends ScalaJSModule, ScalablyTyped:
-  def scalaVersion   = "3.5.0"
+  def scalaVersion   = "3.3.6"
   def scalaJSVersion = "1.16.0"
   def moduleKind     = ModuleKind.ESModule
 
