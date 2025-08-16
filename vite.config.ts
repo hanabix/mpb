@@ -25,7 +25,9 @@ export default defineConfig(({ mode }) => {
         manifest: generateManifest,
         watchFilePaths: ["package.json", "manifest.json"],
         webExtConfig: {
+          target: "chromium",
           startUrl: ["https://connect.garmin.cn/modern"],
+          browserConsole: true
         },
       }),
     ],
