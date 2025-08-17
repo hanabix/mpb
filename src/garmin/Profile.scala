@@ -11,7 +11,7 @@ import sourcecode.Name
 
 sealed trait Profile
 object Profile:
-  given (using Initialize[HTMLElement], Inject[List[ActivityId]]): Proceed[Profile] = Proceed:
+  given (using Initialize[HTMLElement], Inject[Seq[ActivityId]]): Proceed[Profile] = Proceed:
     case (URL(s"/modern/profile/$_", _), `a[data-activityid]`(_)) =>
       val ids = for 
         case a @ `data-activityid`(sid)  <- `a[data-activityid]`.all(Seq(document)) if isRunning(a)
@@ -19,7 +19,7 @@ object Profile:
 
       if ids.nonEmpty then
         val e = `div[class^="PageContent"]`(document).getOrElse(throw Complain("anchor"))
-        ids.toList.inject("mpb".elementAt(e.before(_)))
+        ids.inject("mpb".elementAt(e.before(_)))
   end given
 
   private inline def isRunning(e: Element): Boolean =

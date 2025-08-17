@@ -55,13 +55,13 @@ given [A](using
 ): Registry[Ancestry[A], PlotMouseEvent] with
   extension (a: Ancestry[A])
     def handler: Handler[PlotMouseEvent] = (p, e) =>
-      val (ha @ (h, t), back) = a: @unchecked
-      ha.handler(p, e)
+      val (h, back) = a: @unchecked
+      h.handler(p, e)
 
       val conf = summon[PartialConfig].setModeBarButtonsToAddVarargs:
         ModeBarButton((_, _) => back(), Icons.home, "back", "回退")
 
-      val ia = (h :: t)(e.convert.intValue)
+      val ia = h.deref(e.convert.intValue)
       val select = ia.plot: (data, layout) =>
         newPlot(p, data, layout, conf).`then`: pp =>
           Listen[plotly_legendclick, Interval[A]](pp, ia)

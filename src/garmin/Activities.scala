@@ -9,7 +9,7 @@ import sourcecode.Name
 
 sealed trait Activities
 object Activities:
-  given (using Initialize[HTMLElement], Inject[List[ActivityId]]): Proceed[Activities] = Proceed:
+  given (using Initialize[HTMLElement], Inject[Seq[ActivityId]]): Proceed[Activities] = Proceed:
     case (URL("/modern/activities", `activityType`("running")), `a[href^="/modern/activity/"]`(_)) =>
       val ids =
         for case `href`(s"/modern/activity/$id") <- `a[href^="/modern/activity/"]`.all(Seq(document))
@@ -17,7 +17,7 @@ object Activities:
 
       if ids.nonEmpty then
         val e = `div#searchAndFilterContainer`(document).getOrElse(throw Complain("anchor"))
-        ids.toList.inject(`mpb`.elementAt(e.before(_)))
+        ids.inject(`mpb`.elementAt(e.before(_)))
 
     case (URL("/modern/activities", `activityType`("running")), _) =>
     case (URL("/modern/activities", _), _)                         => `mpb`.reset()

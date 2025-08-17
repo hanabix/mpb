@@ -14,27 +14,29 @@ opaque type ActivityId = String
 
 object ActivityId:
   def apply(s: String): ActivityId = s
-  
+
   type Required = (bpm, spm, Distance, Duration, Intensity)
 
   given (using
     Predicate[Required, js.Dynamic],
     Fetch[Get, js.Dynamic],
     Inject[History[js.Dynamic]]
-  ): Inject[List[ActivityId]] with
-    extension (ids: List[ActivityId])
+  ): Inject[Seq[ActivityId]] with
+    extension (ids: Seq[ActivityId])
       def inject(e: HTMLElement): Unit =
-        for case Some(h) :: t <- Future.sequence(ids.map(splits[Required])) do
-          (h -> t.map(_.toList).flatten).inject(e)
+        for r <- Future.sequence(ids.map(splits[Required])) do
+          (for case NonEmpty.Ref(i) <- r yield i) match
+            case NonEmpty.Ref(history) => history.inject(e)
+            case _                     => // ignore
+    end extension
+  end given
 
   private def splits[T](id: ActivityId)(using Fetch[Get, js.Dynamic], Predicate[T, js.Dynamic]) =
     inline def url      = s"https://connect.garmin.cn/activity-service/activity/$id/splits"
     inline def referrer = s"https://connect.garmin.cn/modern/activity/$id"
 
     for d <- Get(url, referrer).request
-    yield d.asInstanceOf[Splits].lapDTOs.toList.filter(Predicate[T, js.Dynamic]) match
-      case h :: t => Some(h -> t)
-      case _      => None
+    yield d.asInstanceOf[Splits].lapDTOs.toList.filter(Predicate[T, js.Dynamic])
 
   private trait Splits extends js.Object:
     def lapDTOs: js.Array[js.Dynamic]
