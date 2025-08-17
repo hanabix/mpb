@@ -13,13 +13,13 @@ sealed trait Profile
 object Profile:
   given (using Initialize[HTMLElement], Inject[List[ActivityId]]): Proceed[Profile] = Proceed:
     case (URL(s"/modern/profile/$_", _), `a[data-activityid]`(_)) =>
-      val ls = `a[data-activityid]`.all(Seq(document))
-      println(s"activities: ${ls.size}")
-      val es  = ls.filter(isRunning).toList
-      println(s"filtered: ${es.size}")
-      val ids = for case `data-activityid`(id) <- es yield ActivityId(id)
-      val e   = `div[class^="PageContent"]`(document).getOrElse(throw Complain("anchor"))
-      ids.inject("mpb".elementAt(e.before(_)))
+      val ids = for 
+        case a @ `data-activityid`(sid)  <- `a[data-activityid]`.all(Seq(document)) if isRunning(a)
+      yield ActivityId(sid)
+
+      if ids.nonEmpty then
+        val e = `div[class^="PageContent"]`(document).getOrElse(throw Complain("anchor"))
+        ids.toList.inject("mpb".elementAt(e.before(_)))
   end given
 
   private inline def isRunning(e: Element): Boolean =
