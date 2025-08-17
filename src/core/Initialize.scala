@@ -1,7 +1,6 @@
 package core
 
-import org.scalajs.dom.*
-import org.scalajs.dom.HTMLDivElement as Div
+import org.scalajs.dom.{HTMLDivElement as Div, *}
 
 trait Initialize[+A <: Element]:
   extension (id: String)
