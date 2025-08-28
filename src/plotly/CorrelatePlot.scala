@@ -39,7 +39,7 @@ object CorrelatePlot:
         i =>
           val elected = secondaries.zipWithIndex.map:
             case (d, n) if n + 1 == i => d |> visible(true)
-            case (d, n)               => d |> copy("name", "x", "yaxis") |> visible(legendonly)
+            case (d, _)               => d |> copy("name", "x", "yaxis") |> visible(legendonly)
           f(primary :: elected, layout.setYaxis2(ys(i).setColorIndex(i)))
   end apply
 
