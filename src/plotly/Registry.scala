@@ -1,9 +1,7 @@
 package plotly
 
 import scala.language.implicitConversions
-import scala.scalajs.js
 
-import typings.plotlyJs.mod.PlotlyHTMLElement
 import typings.plotlyJsDistMin.mod.*
 
 import convs.given
