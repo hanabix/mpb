@@ -1,6 +1,6 @@
 # Node
-.nvm/
 node_modules/
+
 dist/
 
 # Scala
@@ -14,6 +14,6 @@ out/
 # temp
 .tmp/
 
-.sdk/
-
 .DS_Store
+
+pnpm-lock.yaml
