@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "release-it": "^21.0.1",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vite": "^7.0.5",
     "vite-plugin-web-extension": "^4.4.5",
     "webextension-polyfill": "^0.12.0"
